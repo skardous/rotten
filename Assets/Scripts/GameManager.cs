@@ -12,7 +12,10 @@ public class GameManager : MonoBehaviour
     //public Text scoreText;
     //public Text timeText;
     private List<GameObject> boardElements = new List<GameObject>();
+    private List<GameObject> fruitsList = new List<GameObject>();
+    private List<GameObject> cooksList = new List<GameObject>();
     public GameObject fruit;
+    public GameObject cook;
     private bool gameInProgress = true;
     private int enemyOverFence = 0;
     public GameObject defeatPanel;
@@ -22,6 +25,25 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Debug.Log("Start");
+
+        int[] spawnCooks = new int[]{ 1, 2, 3 };
+        for(int i = 0; i < 3; i++)
+        {
+            GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
+            RectTransform canvasRectTransform = canvas.GetComponent<RectTransform>();
+            float canvasWidth = canvasRectTransform.rect.width;
+            float canvasHeight = canvasRectTransform.rect.height;
+
+            float canvasLeft = -1 * (canvasWidth / 2);
+
+            float spawnX = (canvasLeft + (canvasWidth / 5) * spawnCooks[i]) + (canvasWidth / 5) / 2;
+
+            GameObject cookCreated = Instantiate(cook, new Vector3(spawnX, 0, 0), Quaternion.identity) as GameObject;
+            RectTransform fruitTransform = cookCreated.GetComponent<RectTransform>();
+            fruitTransform.sizeDelta = new Vector2((canvasWidth / 5), (canvasWidth / 5));
+            cookCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+            cooksList.Add(cookCreated);
+        }
     }
 
     // Update is called once per frame
@@ -35,6 +57,11 @@ public class GameManager : MonoBehaviour
                 lastTick = Time.time;
                 tick();
             }
+
+            foreach (GameObject fruit in fruitsList)
+            {
+                moveFruit(fruit);
+            }
         }
 
 
@@ -44,7 +71,7 @@ public class GameManager : MonoBehaviour
     private void tick()
     {
         currentTime++;
-        Debug.Log(currentTime.ToString());
+        //Debug.Log(currentTime.ToString());
         //timeText.text = currentTime.ToString();
         if (itsSpawnTime())
         {
@@ -54,19 +81,16 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        List<GameObject> enemiesToMove = new List<GameObject>();
-        foreach (GameObject element in getElements())
-        {
-            if (element.name.Contains("Enemy"))
-            {
-                enemiesToMove.Add(element);
-            }
-        }
+        //List<GameObject> enemiesToMove = new List<GameObject>();
+        //foreach (GameObject fruit in fruitsList)
+        //{
+        //    fruitsTo.Add(element);
+        //}
 
-        foreach (GameObject enemy in enemiesToMove)
-        {
-            moveEnemy(enemy);
-        }
+        //foreach (GameObject enemy in enemiesToMove)
+        //{
+        //    moveEnemy(enemy);
+        //}
 
     }
 
@@ -83,7 +107,7 @@ public class GameManager : MonoBehaviour
 
     public bool itsSpawnTime()
     {
-        Debug.Log("currentTime : " + currentTime);
+        //Debug.Log("currentTime : " + currentTime);
         //if (currentTime < 10 && (currentTime % 5 == 0 || currentTime == 2))
         //    return true;
 
@@ -96,7 +120,7 @@ public class GameManager : MonoBehaviour
         //if (currentTime > 30 && currentTime % 1 == 0)
         //    return true;
         
-        if(currentTime % 5 == 0)
+        if(currentTime % 2 == 0)
         {
             return true;
         }
@@ -115,41 +139,80 @@ public class GameManager : MonoBehaviour
         return 3;
     }
 
-    public void moveEnemy(GameObject enemy)
+    public void moveFruit(GameObject fruit)
     {
-        enemy.transform.Translate(new Vector2(0, -1));
-        List<GameObject> overlappingSoldiers = getOverlappingSoldiers(enemy);
-        if (overlappingSoldiers.Count > 0)
+        fruit.transform.Translate(new Vector3(0, -.01f, 0));
+        List<GameObject> overlappingCooks = getOverlappingCooks(fruit);
+        if (overlappingCooks.Count > 0)
         {
-            destroyUnit(enemy);
+            destroyFruit(fruit);
             playerScore++;
             //scoreText.text = playerScore.ToString();
-            destroyUnit(overlappingSoldiers[0]);
+            //destroyFruit(overlappingSoldiers[0]);
         }
-        if (enemy.transform.position.y < -7)
-        {
-            enemyOverFence++;
-        }
+        //if (fruit.transform.position.y < -7)
+        //{
+        //    enemyOverFence++;
+        //}
     }
 
-    public List<GameObject> getElements()
+    public List<GameObject> getCooks()
     {
-        return boardElements;
+        return cooksList;
+    }
+
+    public List<GameObject> getFruits()
+    {
+        return fruitsList;
     }
 
     public void spawnFruit()
     {
-        int spawnX = Random.Range(-5, 5);
-        GameObject fruitCreated = Instantiate(fruit, new Vector2(spawnX, 10), gameObject.transform.rotation, GameObject.FindGameObjectWithTag("Canvas").transform) as GameObject;
-        //fruitCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
-        boardElements.Add(fruitCreated);
+        int spawnRandom = Random.Range(0, 5);
+        Debug.Log(spawnRandom);
+        GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
+        RectTransform canvasRectTransform = canvas.GetComponent<RectTransform>();
+        float canvasWidth = canvasRectTransform.rect.width;
+        float canvasHeight = canvasRectTransform.rect.height;
+
+        float canvasLeft = -1 * (canvasWidth / 2);
+
+        float spawnX = (canvasLeft + (canvasWidth / 5) * spawnRandom) + (canvasWidth / 5)/2;
+        
+        GameObject fruitCreated = Instantiate(fruit, new Vector3(spawnX, 1 * (canvasHeight / 2), 0), Quaternion.identity) as GameObject;
+        RectTransform fruitTransform = fruitCreated.GetComponent<RectTransform>();
+        fruitTransform.sizeDelta = new Vector2((canvasWidth / 5), (canvasWidth / 5));
+        fruitCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+        fruitsList.Add(fruitCreated);
     }
 
-    public void destroyUnit(GameObject unit)
+    public void destroyFruit(GameObject fruit)
     {
-        Destroy(unit);
-        boardElements.Remove(unit);
+        Destroy(fruit);
+        fruitsList.Remove(fruit);
     }
+
+    
+
+    public List<GameObject> getOverlappingCooks(GameObject me)
+    {
+        List<GameObject> overlappingElements = getOverlappingElements(me);
+        List<GameObject> overlappingCooks = new List<GameObject>();
+        foreach (GameObject obj in overlappingElements)
+        {
+                Debug.Log("Overlapping object : " + obj.name);
+            if (obj.name.Contains("Cook"))
+            {
+                overlappingCooks.Add(obj);
+            }
+        }
+        return overlappingCooks;
+    }
+
+    /**
+     * TOOLS
+     *
+     * **/
 
     public List<GameObject> getOverlappingElements(GameObject me)
     {
@@ -161,9 +224,9 @@ public class GameManager : MonoBehaviour
         {
             foreach (Collider2D c in overlap)
             {
-                Debug.Log("Overlapping object : " + c.gameObject.name);
+                //Debug.Log("Overlapping object : " + c.gameObject.name);
 
-                if (getElements().Contains(c.gameObject))
+                if (getCooks().Contains(c.gameObject))
                 {
                     overlappingElements.Add(c.gameObject);
                 }
@@ -171,20 +234,6 @@ public class GameManager : MonoBehaviour
         }
 
         return overlappingElements;
-    }
-
-    public List<GameObject> getOverlappingSoldiers(GameObject me)
-    {
-        List<GameObject> overlappingElements = getOverlappingElements(me);
-        List<GameObject> overlappingSoldiers = new List<GameObject>();
-        foreach (GameObject obj in overlappingElements)
-        {
-            if (obj.name.Contains("Soldier"))
-            {
-                overlappingSoldiers.Add(obj);
-            }
-        }
-        return overlappingSoldiers;
     }
 
 }
