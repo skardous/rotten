@@ -37,7 +37,7 @@ public class ItemDrag : MonoBehaviour, IDragHandler
  
         if (Input.touchCount > 0)
         {
-            Debug.Log(Input.GetTouch(0).position)
+            Debug.Log(Input.GetTouch(0).position);
         }
 #endif
     }

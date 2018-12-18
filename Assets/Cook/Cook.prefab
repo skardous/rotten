@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2176628625418544976}
   - component: {fileID: 5839721825481905250}
   - component: {fileID: 6592431372277536575}
-  - component: {fileID: 2401277609039990735}
   - component: {fileID: 2438032476910021754}
+  - component: {fileID: 5624397905161640739}
   m_Layer: 0
   m_Name: Cook
   m_TagString: Untagged
@@ -76,21 +76,6 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!111 &2401277609039990735
-Animation:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5199535215082273414}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 0}
-  m_Animations: []
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
 --- !u!61 &2438032476910021754
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -117,3 +102,17 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 50, y: 50}
   m_EdgeRadius: 0
+--- !u!114 &5624397905161640739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5199535215082273414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 850cef9d74a4d5b4189e262985b56a49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idleImage: {fileID: 21300000, guid: c988f961e6f9626428ea55b19f67148e, type: 3}
+  busyImage: {fileID: 21300000, guid: ef5b92dfec212224e904a9bfbd9ce5e0, type: 3}
