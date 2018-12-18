@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     private List<GameObject> boardElements = new List<GameObject>();
     private List<GameObject> fruitsList = new List<GameObject>();
     private List<GameObject> cooksList = new List<GameObject>();
+
+    public GameObject[] fruitsPrefabs;
     public GameObject fruit;
     public GameObject cook;
     private bool gameInProgress = true;
@@ -25,8 +27,7 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Debug.Log("Start");
-
+        // spawn the cooks
         int[] spawnCooks = new int[]{ 1, 2, 3 };
         for(int i = 0; i < 3; i++)
         {
@@ -40,8 +41,10 @@ public class GameManager : MonoBehaviour
             float spawnX = (canvasLeft + (canvasWidth / 5) * spawnCooks[i]) + (canvasWidth / 5) / 2;
 
             GameObject cookCreated = Instantiate(cook, new Vector3(spawnX, 0, 0), Quaternion.identity) as GameObject;
-            RectTransform fruitTransform = cookCreated.GetComponent<RectTransform>();
-            fruitTransform.sizeDelta = new Vector2((canvasWidth / 5), (canvasWidth / 5));
+            RectTransform cookTransform = cookCreated.GetComponent<RectTransform>();
+            Vector2 size = cookTransform.sizeDelta;
+            float ratio = size.y / size.x;
+            cookTransform.sizeDelta = new Vector2((canvasWidth / 5), (canvasWidth / 5) * ratio);
             cookCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
             cooksList.Add(cookCreated);
         }
@@ -52,7 +55,6 @@ public class GameManager : MonoBehaviour
     {
         if (gameInProgress)
         {
-            Debug.Log("progress");
             if (Time.time - lastTick >= (1 / ticksPerSecond))
             {
                 lastTick = Time.time;
@@ -193,7 +195,6 @@ public class GameManager : MonoBehaviour
     public void spawnFruit()
     {
         int spawnRandom = Random.Range(0, 5);
-        Debug.Log(spawnRandom);
         GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
         RectTransform canvasRectTransform = canvas.GetComponent<RectTransform>();
         float canvasWidth = canvasRectTransform.rect.width;

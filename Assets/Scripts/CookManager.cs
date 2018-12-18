@@ -33,11 +33,22 @@ public class CookManager : MonoBehaviour, IDragHandler
     // Update is called once per frame
     void Update()
     {
-        if (cooking == true && (Time.time - cookStart) > 3)
+        Slider slider = gameObject.transform.Find("Slider").GetComponent<Slider>();
+        float cookTime = (Time.time - cookStart);
+        if (cooking == true && cookTime > 3)
         {
             cooking = false;
-            myImage = GetComponent<Image>();
+            myImage = gameObject.transform.Find("CookImage").GetComponent<Image>();
             myImage.sprite = idleImage;
+            slider.normalizedValue = 0;
+            gameObject.transform.Find("Slider").gameObject.SetActive(false);
+        }
+
+        Debug.Log(slider.value);
+        if (cooking == true)
+        {
+            gameObject.transform.Find("Slider").gameObject.SetActive(true);
+            slider.normalizedValue = (cookTime * 1) / 3;
         }
     }
 
@@ -45,7 +56,7 @@ public class CookManager : MonoBehaviour, IDragHandler
     {
         cooking = true;
         cookStart = Time.time;
-        myImage = GetComponent<Image>();
+        myImage = gameObject.transform.Find("CookImage").GetComponent<Image>();
         myImage.sprite = busyImage;
     }
 

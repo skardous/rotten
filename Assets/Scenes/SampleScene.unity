@@ -463,8 +463,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3be050527463a004c897407798c6340d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fruit: {fileID: 1662195732596662228, guid: 1a5fc2579030a4040b40a9402edcfef9, type: 3}
-  cook: {fileID: 5199535215082273414, guid: 88b7d30560104f547beda95a468a4799, type: 3}
+  fruit: {fileID: 478452299759345735, guid: 1a5fc2579030a4040b40a9402edcfef9, type: 3}
+  cook: {fileID: 5880079906187992339, guid: 88b7d30560104f547beda95a468a4799, type: 3}
   defeatPanel: {fileID: 0}
   ticksPerSecond: 1
   sproutchText: {fileID: 344730805}
