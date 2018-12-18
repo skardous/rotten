@@ -44,7 +44,6 @@ public class CookManager : MonoBehaviour, IDragHandler
             gameObject.transform.Find("Slider").gameObject.SetActive(false);
         }
 
-        Debug.Log(slider.value);
         if (cooking == true)
         {
             gameObject.transform.Find("Slider").gameObject.SetActive(true);

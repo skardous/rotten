@@ -11,18 +11,22 @@ public class GameManager : MonoBehaviour
     float playerScore = 0;
     //public Text scoreText;
     //public Text timeText;
-    private List<GameObject> boardElements = new List<GameObject>();
-    private List<GameObject> fruitsList = new List<GameObject>();
+    private List<GameObject> consumablesList = new List<GameObject>();
+    private List<GameObject> vegetablesPrefabsList = new List<GameObject>();
+    private List<GameObject> fruitsPrefabsList = new List<GameObject>();
     private List<GameObject> cooksList = new List<GameObject>();
 
-    public GameObject[] fruitsPrefabs;
-    public GameObject fruit;
+    public List<GameObject> consumablesPrefabs;
     public GameObject cook;
     private bool gameInProgress = true;
-    private int rottenFruits = 0;
+    private int rottenConsumables = 0;
     public GameObject defeatPanel;
     public float ticksPerSecond;
     public GameObject sproutchText;
+    public Slider rottenSlider;
+    public GameObject canvas;
+
+    public static System.Random rnd = new System.Random();
 
     // Use this for initialization
     void Start()
@@ -48,6 +52,18 @@ public class GameManager : MonoBehaviour
             cookCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
             cooksList.Add(cookCreated);
         }
+
+        foreach (GameObject consumablePrefab in consumablesPrefabs)
+        {
+            ConsumableManager consManager = consumablePrefab.GetComponent<ConsumableManager>();
+            if (consManager.type == ConsumableManager.ConsumableTypeEnum.Vegetable)
+            {
+                vegetablesPrefabsList.Add(consumablePrefab);
+            } else if (consManager.type == ConsumableManager.ConsumableTypeEnum.Fruit)
+            {
+                fruitsPrefabsList.Add(consumablePrefab);
+            }
+        }
     }
 
     // Update is called once per frame
@@ -61,12 +77,16 @@ public class GameManager : MonoBehaviour
                 tick();
             }
 
-            foreach (GameObject fruit in fruitsList)
+            foreach (GameObject consumable in consumablesList)
             {
-                moveFruit(fruit);
+                moveConsumable(consumable);
             }
         }
 
+        if (rottenSlider.value < (rottenConsumables/3f))
+        {
+            rottenSlider.value = rottenSlider.value + 0.01f;
+        }
 
         checkLoss();
     }
@@ -78,16 +98,20 @@ public class GameManager : MonoBehaviour
         //timeText.text = currentTime.ToString();
         if (itsSpawnTime())
         {
-            for (int i = 0; i < getFruitNbToSpawn(); i++)
+            int[] possiblePositions = { 0, 1, 2, 3, 4 };
+            possiblePositions = Shuffle<int>(possiblePositions);
+
+            for (int i = 0; i < getConsumableNbToSpawn(); i++)
             {
-                spawnFruit();
+                int position = possiblePositions[i];
+                spawnConsumable(position);
             }
         }
 
         //List<GameObject> enemiesToMove = new List<GameObject>();
-        //foreach (GameObject fruit in fruitsList)
+        //foreach (GameObject consumable in consumablesList)
         //{
-        //    fruitsTo.Add(element);
+        //    consumablesTo.Add(element);
         //}
 
         //foreach (GameObject enemy in enemiesToMove)
@@ -101,7 +125,7 @@ public class GameManager : MonoBehaviour
 
     public void checkLoss()
     {
-        //if (rottenFruits > 0)
+        //if (rottenConsumables > 0)
         //{
         //    gameInProgress = false;
         //    defeatPanel.SetActive(true);
@@ -131,7 +155,7 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    public int getFruitNbToSpawn()
+    public int getConsumableNbToSpawn()
     {
         if (currentTime < 30)
             return 1;
@@ -142,35 +166,32 @@ public class GameManager : MonoBehaviour
         return 3;
     }
 
-    public void moveFruit(GameObject fruit)
+    public void moveConsumable(GameObject consumable)
     {
         GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
         RectTransform canvasRectTransform = canvas.GetComponent<RectTransform>();
         float canvasHeight = canvasRectTransform.rect.height;
         float moveY = -1 * (canvasHeight / 300);
-        fruit.transform.Translate(new Vector3(0, moveY, 0));
-        List<GameObject> overlappingCooks = getOverlappingCooks(fruit);
+        consumable.transform.Translate(new Vector3(0, moveY, 0));
+        List<GameObject> overlappingCooks = getOverlappingCooks(consumable);
         if (overlappingCooks.Count > 0)
         {
             GameObject cook = overlappingCooks[0];
             CookManager cookManager = (CookManager)cook.GetComponent(typeof(CookManager));
-            if (cookManager.IsCooking() == true)
-            {
-
-            } else
-            {
-                destroyFruit(fruit);
+            if (cookManager.IsCooking() == false)
+            { 
+                destroyConsumable(consumable);
                 playerScore++;
                 //scoreText.text = playerScore.ToString();
-                cookManager.StartCooking(fruit);
+                cookManager.StartCooking(consumable);
             }
            
         }
         
-        if (fruit.transform.position.y < 0)
+        if (consumable.transform.position.y < 0)
         {
-            rottenFruits++;
-            destroyFruit(fruit);
+            rottenConsumables++;
+            destroyConsumable(consumable);
             StartCoroutine(ShowMessage(1));
         }
     }
@@ -187,14 +208,15 @@ public class GameManager : MonoBehaviour
         return cooksList;
     }
 
-    public List<GameObject> getFruits()
+    public List<GameObject> getConsumables()
     {
-        return fruitsList;
+        return consumablesList;
     }
 
-    public void spawnFruit()
+    public void spawnConsumable(int spawnRandom)
     {
-        int spawnRandom = Random.Range(0, 5);
+        int spawnType = Random.Range(0, 2);
+
         GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
         RectTransform canvasRectTransform = canvas.GetComponent<RectTransform>();
         float canvasWidth = canvasRectTransform.rect.width;
@@ -203,21 +225,30 @@ public class GameManager : MonoBehaviour
         float canvasLeft = -1 * (canvasWidth / 2);
 
         float spawnX = (canvasLeft + (canvasWidth / 5) * spawnRandom) + (canvasWidth / 5)/2;
-        
-        GameObject fruitCreated = Instantiate(fruit, new Vector3(spawnX, 1 * (canvasHeight / 2), 0), Quaternion.identity) as GameObject;
-        RectTransform fruitTransform = fruitCreated.GetComponent<RectTransform>();
-        BoxCollider2D fruitCollider = fruitCreated.GetComponent<BoxCollider2D>();
-        RectTransform fruitImageTransform = fruitTransform.GetChild(0).GetComponent<RectTransform>();
-        fruitImageTransform.sizeDelta = new Vector2((canvasWidth / 5), (canvasWidth / 5));
-        fruitCollider.size = new Vector2((canvasWidth / 5), (canvasWidth / 5));
-        fruitCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
-        fruitsList.Add(fruitCreated);
+
+        GameObject consumable = vegetablesPrefabsList[0];
+        if (spawnType == 0)
+        {
+            consumable = vegetablesPrefabsList[Random.Range(0, vegetablesPrefabsList.Count)];
+        } else
+        {
+            consumable = fruitsPrefabsList[Random.Range(0, fruitsPrefabsList.Count)];
+        }
+
+        GameObject consumableCreated = Instantiate(consumable, new Vector3(spawnX, 1 * (canvasHeight / 2), 0), Quaternion.identity) as GameObject;
+        RectTransform consumableTransform = consumableCreated.GetComponent<RectTransform>();
+        BoxCollider2D consumableCollider = consumableCreated.GetComponent<BoxCollider2D>();
+        RectTransform consumableImageTransform = consumableTransform.GetChild(0).GetComponent<RectTransform>();
+        consumableImageTransform.sizeDelta = new Vector2((canvasWidth / 5), (canvasWidth / 5));
+        consumableCollider.size = new Vector2((canvasWidth / 5), (canvasWidth / 5));
+        consumableCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+        consumablesList.Add(consumableCreated);
     }
 
-    public void destroyFruit(GameObject fruit)
+    public void destroyConsumable(GameObject consumable)
     {
-        Destroy(fruit);
-        fruitsList.Remove(fruit);
+        Destroy(consumable);
+        consumablesList.Remove(consumable);
     }
 
     
@@ -240,7 +271,6 @@ public class GameManager : MonoBehaviour
      * TOOLS
      *
      * **/
-
     public List<GameObject> getOverlappingElements(GameObject me)
     {
         BoxCollider2D boxCollider = me.GetComponent<BoxCollider2D>();
@@ -251,8 +281,6 @@ public class GameManager : MonoBehaviour
         {
             foreach (Collider2D c in overlap)
             {
-                //Debug.Log("Overlapping object : " + c.gameObject.name);
-
                 if (getCooks().Contains(c.gameObject))
                 {
                     overlappingElements.Add(c.gameObject);
@@ -261,6 +289,21 @@ public class GameManager : MonoBehaviour
         }
 
         return overlappingElements;
+    }
+
+    public T[] Shuffle<T>(T[] array)
+    {
+        var random = rnd;
+        for (int i = array.Length; i > 1; i--)
+        {
+            // Pick random element to swap.
+            int j = random.Next(i); // 0 <= j <= i-1
+                                    // Swap.
+            T tmp = array[j];
+            array[j] = array[i - 1];
+            array[i - 1] = tmp;
+        }
+        return array;
     }
 
 }
