@@ -1089,6 +1089,7 @@ GameObject:
   - component: {fileID: 1046856022}
   - component: {fileID: 1046856024}
   - component: {fileID: 1046856023}
+  - component: {fileID: 1046856025}
   m_Layer: 0
   m_Name: Unlock-overlay
   m_TagString: Untagged
@@ -1112,6 +1113,7 @@ RectTransform:
   - {fileID: 1625906420}
   - {fileID: 1575501764}
   - {fileID: 1828672444}
+  - {fileID: 1959532183}
   m_Father: {fileID: 1210647381}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1157,6 +1159,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1046856021}
   m_CullTransparentMesh: 0
+--- !u!114 &1046856025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046856021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85d50239720821e469ae99d2ed8bb138, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 1076193392}
 --- !u!1 &1076193391
 GameObject:
   m_ObjectHideFlags: 0
@@ -1201,8 +1216,10 @@ MonoBehaviour:
   rottenSlider: {fileID: 806705213}
   canvas: {fileID: 1715349164}
   gameOverOverlay: {fileID: 1247474344}
+  unlockOverlay: {fileID: 1046856021}
   scoreTextEnd: {fileID: 1038739422}
   scoreTextCorner: {fileID: 1404868183}
+  rottenConsumablesForLose: 8
 --- !u!4 &1076193393
 Transform:
   m_ObjectHideFlags: 0
@@ -1795,7 +1812,7 @@ GameObject:
   - component: {fileID: 1575501766}
   - component: {fileID: 1575501765}
   m_Layer: 0
-  m_Name: Image
+  m_Name: UnlockedImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1815,10 +1832,10 @@ RectTransform:
   m_Father: {fileID: 1046856022}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.145, y: 0.35}
-  m_AnchorMax: {x: 0.85, y: 0.75}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.2463775, y: 0.37600002}
+  m_AnchorMax: {x: 0.7403113, y: 0.65526867}
+  m_AnchoredPosition: {x: 1, y: -1.0999985}
+  m_SizeDelta: {x: 3.869999, y: 4.450001}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1575501765
 MonoBehaviour:
@@ -2348,7 +2365,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.15, y: 0.26}
   m_AnchorMax: {x: 0.85, y: 0.34}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 233.15999}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1828672445
@@ -2620,6 +2637,85 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1919790677}
   m_CullTransparentMesh: 0
+--- !u!1 &1959532182
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1959532183}
+  - component: {fileID: 1959532185}
+  - component: {fileID: 1959532184}
+  m_Layer: 0
+  m_Name: UnlockedSpecialization
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1959532183
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1959532182}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1046856022}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.1, y: 0.26}
+  m_AnchorMax: {x: 0.9, y: 0.3548657}
+  m_AnchoredPosition: {x: -1.0100098, y: 3.5}
+  m_SizeDelta: {x: -30.1, y: -7}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1959532184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1959532182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 4506bf6ca285b494ab0993e12703d5e6, type: 3}
+    m_FontSize: 14
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 10
+    m_MaxSize: 50
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: Vegetables expert !
+--- !u!222 &1959532185
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1959532182}
+  m_CullTransparentMesh: 0
 --- !u!1 &2093452161
 GameObject:
   m_ObjectHideFlags: 0
@@ -2813,7 +2909,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2136183280}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1046856025}
+        m_MethodName: Continue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &2136183280

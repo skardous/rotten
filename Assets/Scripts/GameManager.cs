@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     private List<GameObject> cooksList = new List<GameObject>();
     private RectTransform canvasRectTransform;
     private float spawnPosition = 100f;
+    private int currentLevel = 0;
 
     public List<GameObject> consumablesPrefabs;
     public GameObject normalCookPrefab;
@@ -27,8 +28,10 @@ public class GameManager : MonoBehaviour
     public Slider rottenSlider;
     public GameObject canvas;
     public GameObject gameOverOverlay;
+    public GameObject unlockOverlay;
     public Text scoreTextEnd;
     public Text scoreTextCorner;
+    public float rottenConsumablesForLose = 8f;
 
     public static System.Random rnd = new System.Random();
 
@@ -51,9 +54,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        SpawnCooks();
-
-        
+        SpawnNewCook(normalCookPrefab);
     }
 
     // Update is called once per frame
@@ -73,46 +74,14 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (rottenSlider.value < (rottenConsumables/3f))
+        if (rottenSlider.value < (rottenConsumables/ rottenConsumablesForLose))
         {
             rottenSlider.value = rottenSlider.value + 0.01f;
         }
 
     }
 
-    private void SpawnCooks()
-    {
-        // spawn the cooks
-        int[] spawnCooks = new int[] { 1, 2, 3 };
-        for (int i = 0; i < 3; i++)
-        {
-            float canvasWidth = canvasRectTransform.rect.width;
-            float canvasHeight = canvasRectTransform.rect.height;
-            float canvasLeft = -1 * (canvasWidth / 2);
-            float spawnX = (canvasLeft + (canvasWidth / 5) * spawnCooks[i]) + (canvasWidth / 5) / 2;
-            GameObject cookPrefab = normalCookPrefab;
-            switch (i)
-            {
-                case 1:
-                    cookPrefab = vegetableCookPrefab;
-                    break;
-                case 2:
-                    cookPrefab = fruitCookPrefab;
-                    break;
-                default:
-                    break;
-            }
-            GameObject cookCreated = Instantiate(cookPrefab, new Vector3(spawnX, 0, 0), Quaternion.identity) as GameObject;
-            RectTransform cookTransform = cookCreated.GetComponent<RectTransform>();
-            Vector2 size = cookTransform.sizeDelta;
-            float ratio = size.y / size.x;
-            cookTransform.sizeDelta = new Vector2((canvasWidth / 5), (canvasWidth / 5) * ratio);
-            cookCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
-            CookManager cookManager = (CookManager)cookCreated.GetComponent(typeof(CookManager));
-
-            cooksList.Add(cookCreated);
-        }
-    }
+    
 
     private void tick()
     {
@@ -126,7 +95,6 @@ public class GameManager : MonoBehaviour
 
             for (int i = 0; i < getConsumableNbToSpawn(); i++)
             {
-                Debug.Log("spawn");
                 int position = possiblePositions[i];
                 spawnConsumable(position);
             }
@@ -177,7 +145,7 @@ public class GameManager : MonoBehaviour
         if (currentTime < 30)
             return 1;
 
-        if (currentTime < 40)
+        if (currentTime < 60)
             return 2;
 
         return 3;
@@ -206,6 +174,7 @@ public class GameManager : MonoBehaviour
                 //scoreText.text = playerScore.ToString();
                 cookManager.StartCooking(consumable);
                 destroyConsumable(consumable);
+                CheckNewCook();
             }
 
         }
@@ -215,7 +184,7 @@ public class GameManager : MonoBehaviour
             rottenConsumables++;
             destroyConsumable(consumable);
             StartCoroutine(ShowMessage(1));
-            if (rottenConsumables > 2)
+            if (rottenConsumables > rottenConsumablesForLose)
             {
                 gameInProgress = false;
                 gameOverOverlay.SetActive(true);
@@ -292,10 +261,66 @@ public class GameManager : MonoBehaviour
         return overlappingCooks;
     }
 
+    public void CheckNewCook()
+    {
+        if (currentLevel == 0 && playerScore > 2)
+        {
+            SpawnNewCook(vegetableCookPrefab);
+            Image unlockedImage = unlockOverlay.transform.Find("UnlockedImage").GetComponent<Image>();
+            Text unlockedSpecialization = unlockOverlay.transform.Find("UnlockedSpecialization").GetComponent<Text>();
+            unlockedImage.sprite = vegetableCookPrefab.transform.Find("CookImage").GetComponent<Image>().sprite;
+            unlockedSpecialization.text = "Vegetable expert !";
+            unlockOverlay.SetActive(true);
+            gameInProgress = false;
+            currentLevel++;
+        }
+
+        if (currentLevel == 1 && playerScore > 9)
+        {
+            SpawnNewCook(fruitCookPrefab);
+            Image unlockedImage = unlockOverlay.transform.Find("UnlockedImage").GetComponent<Image>();
+            Text unlockedSpecialization = unlockOverlay.transform.Find("UnlockedSpecialization").GetComponent<Text>();
+            unlockedImage.sprite = fruitCookPrefab.transform.Find("CookImage").GetComponent<Image>().sprite;
+            unlockedSpecialization.text = "Fruit expert !";
+            unlockOverlay.SetActive(true);
+            gameInProgress = false;
+            currentLevel++;
+        }
+    }
+
+    public void SpawnNewCook(GameObject cookPrefab)
+    {
+        float canvasWidth = canvasRectTransform.rect.width;
+        float canvasHeight = canvasRectTransform.rect.height;
+        float canvasLeft = -1 * (canvasWidth / 2);
+        float spawnX = (canvasLeft + (canvasWidth / 5) * (cooksList.Count + 1)) + (canvasWidth / 5) / 2;
+
+        GameObject cookCreated = Instantiate(cookPrefab, new Vector3(spawnX, 0, 0), Quaternion.identity) as GameObject;
+        RectTransform cookTransform = cookCreated.GetComponent<RectTransform>();
+        Vector2 size = cookTransform.sizeDelta;
+        float ratio = size.y / size.x;
+        cookTransform.sizeDelta = new Vector2((canvasWidth / 5), (canvasWidth / 5) * ratio);
+        cookCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+        CookManager cookManager = (CookManager)cookCreated.GetComponent(typeof(CookManager));
+
+        cooksList.Add(cookCreated);
+    }
+
+    private void SpawnCooks()
+    {
+        //// spawn the cooks
+        //int[] spawnCooks = new int[] { 1, 2, 3 };
+        //for (int i = 0; i < 3; i++)
+        //{
+            
+        //}
+    }
+
     public void Restart()
     {
+        currentLevel = 0;
         rottenConsumables = 0;
-        foreach(GameObject consumable in consumablesList)
+        foreach (GameObject consumable in consumablesList)
         {
             Destroy(consumable);
             //consumablesList.Remove(consumable);
@@ -305,14 +330,22 @@ public class GameManager : MonoBehaviour
             Destroy(cook);
         }
         cooksList.RemoveAll(delegate (GameObject o) { return o == null; });
-
-        SpawnCooks();
+        cooksList.Clear();
 
         rottenSlider.value = 0;
         gameInProgress = true;
         gameOverOverlay.SetActive(false);
         currentTime = 0;
+        playerScore = 0;
+        scoreTextCorner.text = playerScore.ToString();
+        Debug.Log(cooksList.Count);
+        SpawnNewCook(normalCookPrefab);
 
+    }
+
+    public void ContinueGame()
+    {
+        gameInProgress = true;
     }
 
     /**

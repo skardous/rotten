@@ -99,9 +99,6 @@ public class CookManager : MonoBehaviour, IDragHandler
             if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Vegetable)
             {
                 return 1;
-            } else
-            {
-                return 4;
             }
         }
 
@@ -110,10 +107,6 @@ public class CookManager : MonoBehaviour, IDragHandler
             if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Fruit)
             {
                 return 1;
-            }
-            else
-            {
-                return 4;
             }
         }
 
