@@ -24,11 +24,16 @@ public class CookManager : MonoBehaviour, IDragHandler
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
 
-        transform.position = Input.mousePosition;
+        if (cooking == false)
+        {
+            transform.position = Input.mousePosition;
+        }
 
 #elif UNITY_IOS || UNITY_ANDROID
-
-        transform.position = Input.GetTouch(0).position;
+        if (cooking == false)
+        {
+            transform.position = Input.GetTouch(0).position;
+        }
 #endif
     }
 
@@ -49,7 +54,7 @@ public class CookManager : MonoBehaviour, IDragHandler
 
         if (cooking == true)
         {
-            int cookingDuration = GetCookingDuration();
+            float cookingDuration = GetCookingDuration();
             if (cookTime > cookingDuration)
             {
                 cooking = false;
@@ -87,18 +92,18 @@ public class CookManager : MonoBehaviour, IDragHandler
         SetIdle();
     }
 
-    public int GetCookingDuration()
+    public float GetCookingDuration()
     {
         if (cookType == CookTypeEnum.NormalCook)
         {
-            return 3;
+            return 1.5f;
         }
 
         if (cookType == CookTypeEnum.VegetableCook )
         {
             if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Vegetable)
             {
-                return 1;
+                return .5f;
             }
         }
 
@@ -106,11 +111,11 @@ public class CookManager : MonoBehaviour, IDragHandler
         {
             if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Fruit)
             {
-                return 1;
+                return .5f;
             }
         }
 
-        return 3;
+        return 1.5f;
     }
 
     public void SetIdle()

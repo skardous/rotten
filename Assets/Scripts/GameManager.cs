@@ -115,27 +115,27 @@ public class GameManager : MonoBehaviour
 
     public bool itsSpawnTime()
     {
-        if (currentTime < 2)
+        if (currentTime == 1)
         {
-            return false;
+            return true;
         }
         //Debug.Log("currentTime : " + currentTime);
-        //if (currentTime < 10 && (currentTime % 5 == 0 || currentTime == 2))
-        //    return true;
+        if (currentTime < 15 && currentTime % 4 == 0)
+            return true;
 
-        //if (currentTime > 10 && currentTime < 20 && currentTime % 3 == 0)
-        //    return true;
+        if (currentTime > 15 && currentTime % 2 ==0)
+            return true;
 
         //if (currentTime > 20 && currentTime < 30 && currentTime % 1 == 0)
         //    return true;
 
         //if (currentTime > 30 && currentTime % 1 == 0)
         //    return true;
-        
-        if(currentTime % 2 == 0)
-        {
-            return true;
-        }
+
+        //if (currentTime % 2 == 0)
+        //{
+        //    return true;
+        //}
 
         return false;
     }
@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour
         if (currentTime < 30)
             return 1;
 
-        if (currentTime < 60)
+        if (currentTime < 120)
             return 2;
 
         return 3;

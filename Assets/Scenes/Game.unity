@@ -1225,7 +1225,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   consumablesPrefabs:
   - {fileID: 211393068686153479, guid: 48fa75e448cf232428bf2f5ccde4b929, type: 3}
-  - {fileID: 19, guid: 1a5fc2579030a4040b40a9402edcfef9, type: 3}
   - {fileID: 7211363523305989679, guid: 9a774e7226a8cc44db26740672607494, type: 3}
   normalCookPrefab: {fileID: 6324535541975193085, guid: ec99cb0c19b761942b4b60bd1f921227,
     type: 3}
