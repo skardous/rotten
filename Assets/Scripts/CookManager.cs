@@ -8,9 +8,17 @@ public class CookManager : MonoBehaviour, IDragHandler
 {
     private bool cooking = false;
     private float cookStart = 0;
+    private ConsumableManager.ConsumableTypeEnum cookingConsumableType;
+    private Image myImage;
+
+    public enum CookTypeEnum { VegetableCook, FruitCook, NormalCook };
+    public CookTypeEnum cookType;
+
     public Sprite idleImage;
+    //public Sprite normalIdleImage;
+    //public Sprite vegIdleImage;
+    //public Sprite fruitIdleImage;
     public Sprite busyImage;
-    Image myImage;
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -27,7 +35,10 @@ public class CookManager : MonoBehaviour, IDragHandler
     // Start is called before the first frame update
     void Start()
     {
-        
+        //cookType = CookTypeEnum.NormalCook;
+        myImage = gameObject.transform.Find("CookImage").GetComponent<Image>();
+        //myImage.sprite = normalIdleImage;
+
     }
 
     // Update is called once per frame
@@ -35,32 +46,102 @@ public class CookManager : MonoBehaviour, IDragHandler
     {
         Slider slider = gameObject.transform.Find("Slider").GetComponent<Slider>();
         float cookTime = (Time.time - cookStart);
-        if (cooking == true && cookTime > 3)
+
+        if (cooking == true)
         {
-            cooking = false;
-            myImage = gameObject.transform.Find("CookImage").GetComponent<Image>();
-            myImage.sprite = idleImage;
-            slider.normalizedValue = 0;
-            gameObject.transform.Find("Slider").gameObject.SetActive(false);
+            int cookingDuration = GetCookingDuration();
+            if (cookTime > cookingDuration)
+            {
+                cooking = false;
+                SetIdle();
+                slider.normalizedValue = 0;
+                gameObject.transform.Find("Slider").gameObject.SetActive(false);
+            }
         }
 
         if (cooking == true)
         {
             gameObject.transform.Find("Slider").gameObject.SetActive(true);
-            slider.normalizedValue = (cookTime * 1) / 3;
+            slider.normalizedValue = cookTime / GetCookingDuration();
         }
     }
 
-    public void StartCooking(GameObject fruit)
+    public void StartCooking(GameObject consumable)
     {
         cooking = true;
         cookStart = Time.time;
-        myImage = gameObject.transform.Find("CookImage").GetComponent<Image>();
-        myImage.sprite = busyImage;
+        //myImage.sprite = busyImage;
+        ConsumableManager consumableManager = (ConsumableManager)consumable.GetComponent(typeof(ConsumableManager));
+        cookingConsumableType = consumableManager.type;
     }
 
     public bool IsCooking()
     {
         return cooking;
+    }
+
+    public void SetCookType(CookTypeEnum type)
+    {
+        Debug.Log(type);
+        cookType = type;
+        SetIdle();
+    }
+
+    public int GetCookingDuration()
+    {
+        if (cookType == CookTypeEnum.NormalCook)
+        {
+            return 3;
+        }
+
+        if (cookType == CookTypeEnum.VegetableCook )
+        {
+            if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Vegetable)
+            {
+                return 1;
+            } else
+            {
+                return 4;
+            }
+        }
+
+        if (cookType == CookTypeEnum.FruitCook)
+        {
+            if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Fruit)
+            {
+                return 1;
+            }
+            else
+            {
+                return 4;
+            }
+        }
+
+        return 3;
+    }
+
+    public void SetIdle()
+    {
+        myImage = gameObject.transform.Find("CookImage").GetComponent<Image>();
+        myImage.sprite = idleImage;
+        //switch (cookType)
+        //{
+        //    case CookTypeEnum.NormalCook:
+        //        myImage.sprite = normalIdleImage;
+        //        Debug.Log("normal");
+        //        break;
+        //    case CookTypeEnum.FruitCook:
+        //        myImage.sprite = fruitIdleImage;
+        //        Debug.Log("fruit");
+        //        break;
+        //    case CookTypeEnum.VegetableCook:
+        //        myImage.sprite = vegIdleImage;
+        //        Debug.Log("veg");
+        //        break;
+        //    default:
+        //        myImage.sprite = normalIdleImage;
+        //        Debug.Log("default");
+        //        break;
+        //}
     }
 }

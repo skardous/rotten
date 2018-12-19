@@ -6,52 +6,36 @@ using System.Collections.Generic;
 public class GameManager : MonoBehaviour
 {
 
+    private bool gameInProgress = true;
+    private int rottenConsumables = 0;
     float lastTick = 0;
     float currentTime = 0;
     float playerScore = 0;
-    //public Text scoreText;
-    //public Text timeText;
     private List<GameObject> consumablesList = new List<GameObject>();
     private List<GameObject> vegetablesPrefabsList = new List<GameObject>();
     private List<GameObject> fruitsPrefabsList = new List<GameObject>();
     private List<GameObject> cooksList = new List<GameObject>();
+    private RectTransform canvasRectTransform;
+    private float spawnPosition = 100f;
 
     public List<GameObject> consumablesPrefabs;
-    public GameObject cook;
-    private bool gameInProgress = true;
-    private int rottenConsumables = 0;
-    public GameObject defeatPanel;
+    public GameObject normalCookPrefab;
+    public GameObject vegetableCookPrefab;
+    public GameObject fruitCookPrefab;
     public float ticksPerSecond;
     public GameObject sproutchText;
     public Slider rottenSlider;
     public GameObject canvas;
+    public GameObject gameOverOverlay;
+    public Text scoreText;
 
     public static System.Random rnd = new System.Random();
 
     // Use this for initialization
     void Start()
     {
-        // spawn the cooks
-        int[] spawnCooks = new int[]{ 1, 2, 3 };
-        for(int i = 0; i < 3; i++)
-        {
-            GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
-            RectTransform canvasRectTransform = canvas.GetComponent<RectTransform>();
-            float canvasWidth = canvasRectTransform.rect.width;
-            float canvasHeight = canvasRectTransform.rect.height;
-
-            float canvasLeft = -1 * (canvasWidth / 2);
-
-            float spawnX = (canvasLeft + (canvasWidth / 5) * spawnCooks[i]) + (canvasWidth / 5) / 2;
-
-            GameObject cookCreated = Instantiate(cook, new Vector3(spawnX, 0, 0), Quaternion.identity) as GameObject;
-            RectTransform cookTransform = cookCreated.GetComponent<RectTransform>();
-            Vector2 size = cookTransform.sizeDelta;
-            float ratio = size.y / size.x;
-            cookTransform.sizeDelta = new Vector2((canvasWidth / 5), (canvasWidth / 5) * ratio);
-            cookCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
-            cooksList.Add(cookCreated);
-        }
+        canvasRectTransform = canvas.GetComponent<RectTransform>();
+        spawnPosition = canvasRectTransform.rect.height;
 
         foreach (GameObject consumablePrefab in consumablesPrefabs)
         {
@@ -59,11 +43,16 @@ public class GameManager : MonoBehaviour
             if (consManager.type == ConsumableManager.ConsumableTypeEnum.Vegetable)
             {
                 vegetablesPrefabsList.Add(consumablePrefab);
-            } else if (consManager.type == ConsumableManager.ConsumableTypeEnum.Fruit)
+            }
+            else if (consManager.type == ConsumableManager.ConsumableTypeEnum.Fruit)
             {
                 fruitsPrefabsList.Add(consumablePrefab);
             }
         }
+
+        SpawnCooks();
+
+        
     }
 
     // Update is called once per frame
@@ -88,7 +77,42 @@ public class GameManager : MonoBehaviour
             rottenSlider.value = rottenSlider.value + 0.01f;
         }
 
-        checkLoss();
+    }
+
+    private void SpawnCooks()
+    {
+        // spawn the cooks
+        int[] spawnCooks = new int[] { 1, 2, 3 };
+        for (int i = 0; i < 3; i++)
+        {
+            float canvasWidth = canvasRectTransform.rect.width;
+            float canvasHeight = canvasRectTransform.rect.height;
+            float canvasLeft = -1 * (canvasWidth / 2);
+            float spawnX = (canvasLeft + (canvasWidth / 5) * spawnCooks[i]) + (canvasWidth / 5) / 2;
+            GameObject cookPrefab = normalCookPrefab;
+            switch (i)
+            {
+                case 1:
+                    cookPrefab = vegetableCookPrefab;
+                    break;
+                case 2:
+                    cookPrefab = fruitCookPrefab;
+                    break;
+                default:
+                    break;
+            }
+            GameObject cookCreated = Instantiate(cookPrefab, new Vector3(spawnX, 0, 0), Quaternion.identity) as GameObject;
+            RectTransform cookTransform = cookCreated.GetComponent<RectTransform>();
+            Vector2 size = cookTransform.sizeDelta;
+            float ratio = size.y / size.x;
+            cookTransform.sizeDelta = new Vector2((canvasWidth / 5), (canvasWidth / 5) * ratio);
+            cookCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+            CookManager cookManager = (CookManager)cookCreated.GetComponent(typeof(CookManager));
+            
+
+
+            cooksList.Add(cookCreated);
+        }
     }
 
     private void tick()
@@ -103,6 +127,7 @@ public class GameManager : MonoBehaviour
 
             for (int i = 0; i < getConsumableNbToSpawn(); i++)
             {
+                Debug.Log("spawn");
                 int position = possiblePositions[i];
                 spawnConsumable(position);
             }
@@ -121,19 +146,12 @@ public class GameManager : MonoBehaviour
 
     }
 
-
-
-    public void checkLoss()
-    {
-        //if (rottenConsumables > 0)
-        //{
-        //    gameInProgress = false;
-        //    defeatPanel.SetActive(true);
-        //}
-    }
-
     public bool itsSpawnTime()
     {
+        if (currentTime < 2)
+        {
+            return false;
+        }
         //Debug.Log("currentTime : " + currentTime);
         //if (currentTime < 10 && (currentTime % 5 == 0 || currentTime == 2))
         //    return true;
@@ -168,24 +186,28 @@ public class GameManager : MonoBehaviour
 
     public void moveConsumable(GameObject consumable)
     {
-        GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
-        RectTransform canvasRectTransform = canvas.GetComponent<RectTransform>();
+        if (consumable == null)
+        {
+            return;
+        }
         float canvasHeight = canvasRectTransform.rect.height;
         float moveY = -1 * (canvasHeight / 300);
         consumable.transform.Translate(new Vector3(0, moveY, 0));
         List<GameObject> overlappingCooks = getOverlappingCooks(consumable);
         if (overlappingCooks.Count > 0)
         {
+            //Debug.Log("overlapping!");
+            //Debug.Log(consumable.transform.position.y);
             GameObject cook = overlappingCooks[0];
             CookManager cookManager = (CookManager)cook.GetComponent(typeof(CookManager));
             if (cookManager.IsCooking() == false)
             { 
-                destroyConsumable(consumable);
                 playerScore++;
                 //scoreText.text = playerScore.ToString();
                 cookManager.StartCooking(consumable);
+                destroyConsumable(consumable);
             }
-           
+
         }
         
         if (consumable.transform.position.y < 0)
@@ -193,6 +215,12 @@ public class GameManager : MonoBehaviour
             rottenConsumables++;
             destroyConsumable(consumable);
             StartCoroutine(ShowMessage(1));
+            if (rottenConsumables > 2)
+            {
+                gameInProgress = false;
+                gameOverOverlay.SetActive(true);
+                scoreText.text = playerScore.ToString();
+            }
         }
     }
 
@@ -217,8 +245,6 @@ public class GameManager : MonoBehaviour
     {
         int spawnType = Random.Range(0, 2);
 
-        GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
-        RectTransform canvasRectTransform = canvas.GetComponent<RectTransform>();
         float canvasWidth = canvasRectTransform.rect.width;
         float canvasHeight = canvasRectTransform.rect.height;
 
@@ -226,6 +252,7 @@ public class GameManager : MonoBehaviour
 
         float spawnX = (canvasLeft + (canvasWidth / 5) * spawnRandom) + (canvasWidth / 5)/2;
 
+        // veg or fruit ?
         GameObject consumable = vegetablesPrefabsList[0];
         if (spawnType == 0)
         {
@@ -235,7 +262,7 @@ public class GameManager : MonoBehaviour
             consumable = fruitsPrefabsList[Random.Range(0, fruitsPrefabsList.Count)];
         }
 
-        GameObject consumableCreated = Instantiate(consumable, new Vector3(spawnX, 1 * (canvasHeight / 2), 0), Quaternion.identity) as GameObject;
+        GameObject consumableCreated = Instantiate(consumable, new Vector3(spawnX, spawnPosition, 0), Quaternion.identity) as GameObject;
         RectTransform consumableTransform = consumableCreated.GetComponent<RectTransform>();
         BoxCollider2D consumableCollider = consumableCreated.GetComponent<BoxCollider2D>();
         RectTransform consumableImageTransform = consumableTransform.GetChild(0).GetComponent<RectTransform>();
@@ -248,11 +275,9 @@ public class GameManager : MonoBehaviour
     public void destroyConsumable(GameObject consumable)
     {
         Destroy(consumable);
-        consumablesList.Remove(consumable);
+        //consumablesList.Remove(consumable);
     }
-
     
-
     public List<GameObject> getOverlappingCooks(GameObject me)
     {
         List<GameObject> overlappingElements = getOverlappingElements(me);
@@ -265,6 +290,29 @@ public class GameManager : MonoBehaviour
             }
         }
         return overlappingCooks;
+    }
+
+    public void Restart()
+    {
+        rottenConsumables = 0;
+        foreach(GameObject consumable in consumablesList)
+        {
+            Destroy(consumable);
+            //consumablesList.Remove(consumable);
+        }
+        foreach (GameObject cook in cooksList)
+        {
+            Destroy(cook);
+        }
+        cooksList.RemoveAll(delegate (GameObject o) { return o == null; });
+
+        SpawnCooks();
+
+        rottenSlider.value = 0;
+        gameInProgress = true;
+        gameOverOverlay.SetActive(false);
+        currentTime = 0;
+
     }
 
     /**

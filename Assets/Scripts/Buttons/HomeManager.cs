@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class startButton : MonoBehaviour
+public class HomeManager : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -14,5 +15,11 @@ public class startButton : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void StartGame()
+    {
+        SceneManager.LoadScene("Game", LoadSceneMode.Single);
+
     }
 }
