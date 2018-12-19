@@ -27,7 +27,8 @@ public class GameManager : MonoBehaviour
     public Slider rottenSlider;
     public GameObject canvas;
     public GameObject gameOverOverlay;
-    public Text scoreText;
+    public Text scoreTextEnd;
+    public Text scoreTextCorner;
 
     public static System.Random rnd = new System.Random();
 
@@ -108,8 +109,6 @@ public class GameManager : MonoBehaviour
             cookTransform.sizeDelta = new Vector2((canvasWidth / 5), (canvasWidth / 5) * ratio);
             cookCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
             CookManager cookManager = (CookManager)cookCreated.GetComponent(typeof(CookManager));
-            
-
 
             cooksList.Add(cookCreated);
         }
@@ -203,6 +202,7 @@ public class GameManager : MonoBehaviour
             if (cookManager.IsCooking() == false)
             { 
                 playerScore++;
+                scoreTextCorner.text = playerScore.ToString();
                 //scoreText.text = playerScore.ToString();
                 cookManager.StartCooking(consumable);
                 destroyConsumable(consumable);
@@ -219,7 +219,7 @@ public class GameManager : MonoBehaviour
             {
                 gameInProgress = false;
                 gameOverOverlay.SetActive(true);
-                scoreText.text = playerScore.ToString();
+                scoreTextEnd.text = playerScore.ToString();
             }
         }
     }
