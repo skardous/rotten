@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     private int wormCount = 0;
     private int clearProgress = 0;
     private Animator anim;
+    private Animator animWormPopup;
 
     public List<GameObject> consumablesPrefabs;
     public GameObject wormPrefab;
@@ -40,11 +41,11 @@ public class GameManager : MonoBehaviour
     public GameObject clearButton;
     public Text scoreTextEnd;
     public Text scoreTextCorner;
+    public GameObject hud;
 
     // conf
     public float rottenConsumablesForLose = 8f;
     public float cookedConsumablesForClear = 8f;
-    public GameObject hud;
 
     public static System.Random rnd = new System.Random();
 
@@ -70,6 +71,7 @@ public class GameManager : MonoBehaviour
         SpawnNewCook(normalCookPrefab1);
 
         anim = hud.GetComponent<Animator>();
+        animWormPopup = wormOverlay.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -306,6 +308,7 @@ public class GameManager : MonoBehaviour
         if (wormCount == 1)
         {
             wormOverlay.SetActive(true);
+            animWormPopup.SetTrigger("triggerWorm");
             gameInProgress = false;
         }
     }
