@@ -94,28 +94,28 @@ public class CookManager : MonoBehaviour, IDragHandler
 
     public float GetCookingDuration()
     {
-        if (cookType == CookTypeEnum.NormalCook)
-        {
-            return 1.5f;
-        }
+        //if (cookType == CookTypeEnum.NormalCook)
+        //{
+        //    return 1.5f;
+        //}
 
-        if (cookType == CookTypeEnum.VegetableCook )
-        {
-            if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Vegetable)
-            {
-                return .5f;
-            }
-        }
+        //if (cookType == CookTypeEnum.VegetableCook )
+        //{
+        //    if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Vegetable)
+        //    {
+        //        return .5f;
+        //    }
+        //}
 
-        if (cookType == CookTypeEnum.FruitCook)
-        {
-            if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Fruit)
-            {
-                return .5f;
-            }
-        }
+        //if (cookType == CookTypeEnum.FruitCook)
+        //{
+        //    if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Fruit)
+        //    {
+        //        return .5f;
+        //    }
+        //}
 
-        return 1.5f;
+        return 2.1f;
     }
 
     public void SetIdle()

@@ -5,7 +5,7 @@ using UnityEngine;
 public class ConsumableManager : MonoBehaviour
 {
 
-    public enum ConsumableTypeEnum { Vegetable, Fruit};
+    public enum ConsumableTypeEnum { Vegetable, Fruit, Worm};
     public ConsumableTypeEnum type;
 
     // Start is called before the first frame update

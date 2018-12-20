@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
     private int currentLevel = 0;
 
     public List<GameObject> consumablesPrefabs;
+    public GameObject wormPrefab;
     public GameObject normalCookPrefab;
     public GameObject vegetableCookPrefab;
     public GameObject fruitCookPrefab;
@@ -79,6 +80,11 @@ public class GameManager : MonoBehaviour
             rottenSlider.value = rottenSlider.value + 0.01f;
         }
 
+        if (rottenSlider.value > (rottenConsumables / rottenConsumablesForLose))
+        {
+            rottenSlider.value = rottenSlider.value - 0.01f;
+        }
+
     }
 
     
@@ -86,18 +92,33 @@ public class GameManager : MonoBehaviour
     private void tick()
     {
         currentTime++;
-        //Debug.Log(currentTime.ToString());
-        //timeText.text = currentTime.ToString();
+        bool[] busyPositions = {false, false, false, false, false};
+        int[] possiblePositions = { 0, 1, 2, 3, 4 };
+        possiblePositions = Shuffle<int>(possiblePositions);
         if (itsSpawnTime())
         {
-            int[] possiblePositions = { 0, 1, 2, 3, 4 };
-            possiblePositions = Shuffle<int>(possiblePositions);
+            
 
             for (int i = 0; i < getConsumableNbToSpawn(); i++)
             {
                 int position = possiblePositions[i];
+                busyPositions[position] = true;
                 spawnConsumable(position);
             }
+
+        }
+
+        if (ItsWormTime())
+        {
+            int position = 0;
+            int j = 0;
+            do
+            {
+                position = possiblePositions[j];
+                j++;
+            } while (busyPositions[position] == true);
+            SpawnWorm(position);
+            
         }
 
         //List<GameObject> enemiesToMove = new List<GameObject>();
@@ -140,12 +161,32 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
+    public bool ItsWormTime()
+    {
+
+        if (currentTime == 20 || currentTime == 40 || (currentTime > 95 && currentTime % 10 == 0))
+            return true;
+
+        //if (currentTime > 20 && currentTime < 30 && currentTime % 1 == 0)
+        //    return true;
+
+        //if (currentTime > 30 && currentTime % 1 == 0)
+        //    return true;
+
+        //if (currentTime % 2 == 0)
+        //{
+        //    return true;
+        //}
+
+        return false;
+    }
+
     public int getConsumableNbToSpawn()
     {
         if (currentTime < 30)
             return 1;
 
-        if (currentTime < 120)
+        if (currentTime < 95)
             return 2;
 
         return 3;
@@ -181,15 +222,23 @@ public class GameManager : MonoBehaviour
         
         if (consumable.transform.position.y < 0)
         {
-            rottenConsumables++;
-            destroyConsumable(consumable);
-            StartCoroutine(ShowMessage(1));
-            if (rottenConsumables > rottenConsumablesForLose)
+            ConsumableManager consumableManager = (ConsumableManager)consumable.GetComponent(typeof(ConsumableManager));
+            if (consumableManager.type == ConsumableManager.ConsumableTypeEnum.Worm)
             {
-                gameInProgress = false;
-                gameOverOverlay.SetActive(true);
-                scoreTextEnd.text = playerScore.ToString();
+                rottenConsumables = 0;
             }
+            else
+            {
+                rottenConsumables++;
+                StartCoroutine(ShowMessage(1));
+                if (rottenConsumables > rottenConsumablesForLose)
+                {
+                    gameInProgress = false;
+                    gameOverOverlay.SetActive(true);
+                    scoreTextEnd.text = playerScore.ToString();
+                }
+            }
+            destroyConsumable(consumable);
         }
     }
 
@@ -241,6 +290,23 @@ public class GameManager : MonoBehaviour
         consumablesList.Add(consumableCreated);
     }
 
+    public void SpawnWorm(int spawnRandom)
+    {
+        float canvasWidth = canvasRectTransform.rect.width;
+        float canvasHeight = canvasRectTransform.rect.height;
+        float canvasLeft = -1 * (canvasWidth / 2);
+        float spawnX = (canvasLeft + (canvasWidth / 5) * spawnRandom) + (canvasWidth / 5) / 2;
+
+        GameObject wormCreated = Instantiate(wormPrefab, new Vector3(spawnX, spawnPosition, 0), Quaternion.identity) as GameObject;
+        RectTransform wormTransform = wormCreated.GetComponent<RectTransform>();
+        BoxCollider2D wormCollider = wormCreated.GetComponent<BoxCollider2D>();
+        RectTransform wormImageTransform = wormTransform.GetChild(0).GetComponent<RectTransform>();
+        wormImageTransform.sizeDelta = new Vector2((canvasWidth / 5), (canvasWidth / 5));
+        wormCollider.size = new Vector2((canvasWidth / 5), (canvasWidth / 5));
+        wormCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
+        consumablesList.Add(wormCreated);
+    }
+
     public void destroyConsumable(GameObject consumable)
     {
         Destroy(consumable);
@@ -265,11 +331,11 @@ public class GameManager : MonoBehaviour
     {
         if (currentLevel == 0 && playerScore > 2)
         {
-            SpawnNewCook(vegetableCookPrefab);
+            SpawnNewCook(normalCookPrefab);
             Image unlockedImage = unlockOverlay.transform.Find("UnlockedImage").GetComponent<Image>();
             Text unlockedSpecialization = unlockOverlay.transform.Find("UnlockedSpecialization").GetComponent<Text>();
-            unlockedImage.sprite = vegetableCookPrefab.transform.Find("CookImage").GetComponent<Image>().sprite;
-            unlockedSpecialization.text = "Vegetable expert !";
+            unlockedImage.sprite = normalCookPrefab.transform.Find("CookImage").GetComponent<Image>().sprite;
+            unlockedSpecialization.text = "";
             unlockOverlay.SetActive(true);
             gameInProgress = false;
             currentLevel++;
@@ -277,11 +343,11 @@ public class GameManager : MonoBehaviour
 
         if (currentLevel == 1 && playerScore > 9)
         {
-            SpawnNewCook(fruitCookPrefab);
+            SpawnNewCook(normalCookPrefab);
             Image unlockedImage = unlockOverlay.transform.Find("UnlockedImage").GetComponent<Image>();
             Text unlockedSpecialization = unlockOverlay.transform.Find("UnlockedSpecialization").GetComponent<Text>();
-            unlockedImage.sprite = fruitCookPrefab.transform.Find("CookImage").GetComponent<Image>().sprite;
-            unlockedSpecialization.text = "Fruit expert !";
+            unlockedImage.sprite = normalCookPrefab.transform.Find("CookImage").GetComponent<Image>().sprite;
+            unlockedSpecialization.text = "";
             unlockOverlay.SetActive(true);
             gameInProgress = false;
             currentLevel++;
