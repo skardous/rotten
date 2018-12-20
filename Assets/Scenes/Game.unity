@@ -1992,7 +1992,7 @@ MonoBehaviour:
   scoreTextCorner: {fileID: 1404868183}
   hud: {fileID: 1295987071}
   rottenConsumablesForLose: 5
-  cookedConsumablesForClear: 8
+  cookedConsumablesForClear: 12
 --- !u!4 &1076193393
 Transform:
   m_ObjectHideFlags: 0
