@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     public GameObject hud;
 
     // conf
-    public float rottenConsumablesForLose = 8f;
+    public float rottenConsumablesForLose = 5f;
     public float cookedConsumablesForClear = 8f;
 
     public static System.Random rnd = new System.Random();
@@ -161,7 +161,10 @@ public class GameManager : MonoBehaviour
         if (currentTime < 15 && currentTime % 4 == 0)
             return true;
 
-        if (currentTime > 15 && currentTime % 2 ==0)
+        if (currentTime > 15 && currentTime % 2 == 0)
+            return true;
+
+        if (currentTime > 75)
             return true;
 
         return false;
@@ -170,7 +173,7 @@ public class GameManager : MonoBehaviour
     public bool ItsWormTime()
     {
 
-        if (currentTime == 20 || (currentTime > 40 && currentTime < 95 && currentTime % 10 == 0) || (currentTime > 95 && currentTime % 8 == 0))
+        if (currentTime == 20 || (currentTime > 40 && currentTime < 75 && currentTime % 10 == 0) || (currentTime > 75 && currentTime % 6 == 0))
             return true;
 
         return false;
@@ -181,10 +184,19 @@ public class GameManager : MonoBehaviour
         if (currentTime < 30)
             return 1;
 
-        if (currentTime < 95)
+        if (currentTime < 75)
             return 2;
 
-        return 3;
+        // after 75s
+        if (currentTime % 3 == 0)
+        {
+            return 2;
+        } else
+        {
+            return 1;
+        }
+
+        return 1;
     }
 
     public void moveConsumable(GameObject consumable)
@@ -195,6 +207,11 @@ public class GameManager : MonoBehaviour
         }
         float canvasHeight = canvasRectTransform.rect.height;
         float moveY = -1 * (canvasHeight / 300);
+        ConsumableManager consumableManager = (ConsumableManager)consumable.GetComponent(typeof(ConsumableManager));
+        if (consumableManager.type == ConsumableManager.ConsumableTypeEnum.Worm)
+        {
+            moveY = -1.43f * (canvasHeight / 300);
+        }
         consumable.transform.Translate(new Vector3(0, moveY, 0));
         List<GameObject> overlappingCooks = getOverlappingCooks(consumable);
         if (overlappingCooks.Count > 0)
@@ -212,7 +229,7 @@ public class GameManager : MonoBehaviour
                 cookManager.StartCooking(consumable);
                 destroyConsumable(consumable);
                 CheckNewCook();
-                if (clearProgress > cookedConsumablesForClear)
+                if (clearProgress >= cookedConsumablesForClear)
                 {
                     clearPanel.SetActive(false);
                     clearButton.SetActive(true);
@@ -223,10 +240,13 @@ public class GameManager : MonoBehaviour
         
         if (consumable.transform.position.y < 0)
         {
-            ConsumableManager consumableManager = (ConsumableManager)consumable.GetComponent(typeof(ConsumableManager));
             if (consumableManager.type == ConsumableManager.ConsumableTypeEnum.Worm)
             {
-                rottenConsumables = 0;
+                rottenConsumables = rottenConsumables - 2;
+                if (rottenConsumables < 0)
+                {
+                    rottenConsumables = 0;
+                }
             }
             else
             {

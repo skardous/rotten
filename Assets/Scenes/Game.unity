@@ -1991,7 +1991,7 @@ MonoBehaviour:
   scoreTextEnd: {fileID: 1038739422}
   scoreTextCorner: {fileID: 1404868183}
   hud: {fileID: 1295987071}
-  rottenConsumablesForLose: 8
+  rottenConsumablesForLose: 5
   cookedConsumablesForClear: 8
 --- !u!4 &1076193393
 Transform:
