@@ -30,7 +30,6 @@ public class GameManager : MonoBehaviour
     public GameObject vegetableCookPrefab;
     public GameObject fruitCookPrefab;
     public float ticksPerSecond;
-    public GameObject sproutchText;
     public Slider rottenSlider;
     public GameObject canvas;
     public GameObject gameOverOverlay;
@@ -46,7 +45,6 @@ public class GameManager : MonoBehaviour
     public float rottenConsumablesForLose = 8f;
     public float cookedConsumablesForClear = 8f;
     public GameObject hud;
-
 
     public static System.Random rnd = new System.Random();
 
@@ -106,9 +104,9 @@ public class GameManager : MonoBehaviour
             clearSlider.value = clearSlider.value + 0.01f;
         }
 
-        if (clearSlider.value > (clearProgress / cookedConsumablesForClear))
+        if ((clearProgress == 0) && (clearSlider.value > (clearProgress / cookedConsumablesForClear)))
         {
-            clearSlider.value = clearSlider.value - 0.01f;
+            clearSlider.value = clearSlider.value - 0.04f;
         }
 
     }
@@ -230,7 +228,6 @@ public class GameManager : MonoBehaviour
             {
                 anim.SetTrigger("TriggerTrash");
                 rottenConsumables++;
-                StartCoroutine(ShowMessage(1));
                 if (rottenConsumables > rottenConsumablesForLose)
                 {
                     gameInProgress = false;
@@ -245,9 +242,7 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ShowMessage(float delay)
     {
-        sproutchText.SetActive(true);
         yield return new WaitForSeconds(delay);
-        sproutchText.SetActive(false);
     }
 
     public List<GameObject> getCooks()
