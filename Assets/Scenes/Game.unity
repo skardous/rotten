@@ -798,10 +798,10 @@ RectTransform:
   m_Father: {fileID: 1259418062}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5215982}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.19702148, y: -12.2}
-  m_SizeDelta: {x: -58.3, y: -6.2}
+  m_AnchoredPosition: {x: 0, y: -4.885002}
+  m_SizeDelta: {x: -58.3, y: -23.869995}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &488747183
 GameObject:
@@ -1036,8 +1036,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -9}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.033935547, y: -18.37}
+  m_SizeDelta: {x: 0, y: 18.54}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &527004142
 MonoBehaviour:
@@ -1396,7 +1396,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 01e584fc9ff6d4a969400e68b97befc4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a3412960b31cd264bb79babddf397215, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1852,7 +1852,11 @@ MonoBehaviour:
   - {fileID: 7211363523305989679, guid: 9a774e7226a8cc44db26740672607494, type: 3}
   wormPrefab: {fileID: 6308173076955419691, guid: 65241c1204206a148b4d29d7dab0e994,
     type: 3}
-  normalCookPrefab: {fileID: 6609763074400107769, guid: 687cb05162ce8cb41ab177660872f43e,
+  normalCookPrefab1: {fileID: 3341224684911291730, guid: 8c87c9552b357904395b279b2fe182e0,
+    type: 3}
+  normalCookPrefab2: {fileID: 1809560197596855061, guid: 01da6d7965478b444af5d8eeb6d7121e,
+    type: 3}
+  normalCookPrefab3: {fileID: 6609763074400107769, guid: 687cb05162ce8cb41ab177660872f43e,
     type: 3}
   vegetableCookPrefab: {fileID: 7734939824258241653, guid: ae288eefb088f6545a0b3fe99f9abf9a,
     type: 3}
@@ -2190,9 +2194,9 @@ RectTransform:
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0.47465855}
-  m_AnchoredPosition: {x: 0.00012207031, y: 0.099998474}
-  m_SizeDelta: {x: 0.000030517578, y: 0.29999924}
+  m_AnchorMax: {x: 1, y: 0.44089845}
+  m_AnchoredPosition: {x: 0.00012207031, y: 2.0999985}
+  m_SizeDelta: {x: 0.000030517578, y: 4.299999}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1259418063
 MonoBehaviour:
