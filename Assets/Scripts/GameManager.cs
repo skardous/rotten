@@ -166,7 +166,7 @@ public class GameManager : MonoBehaviour
     public bool ItsWormTime()
     {
 
-        if (currentTime == 20 || (currentTime > 40 && currentTime < 95 && currentTime % 10 == 0) || (currentTime > 95 && currentTime % 6 == 0))
+        if (currentTime == 20 || (currentTime > 40 && currentTime < 95 && currentTime % 10 == 0) || (currentTime > 95 && currentTime % 8 == 0))
             return true;
 
         return false;
