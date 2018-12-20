@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     private int clearProgress = 0;
     private Animator anim;
     private Animator animWormPopup;
+    private Animator animGameOverPopup;
 
     public List<GameObject> consumablesPrefabs;
     public GameObject wormPrefab;
@@ -72,6 +73,7 @@ public class GameManager : MonoBehaviour
 
         anim = hud.GetComponent<Animator>();
         animWormPopup = wormOverlay.GetComponent<Animator>();
+        animGameOverPopup = gameOverOverlay.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -234,6 +236,7 @@ public class GameManager : MonoBehaviour
                 {
                     gameInProgress = false;
                     gameOverOverlay.SetActive(true);
+                    animGameOverPopup.SetTrigger("triggerGameOver");
                     scoreTextEnd.text = playerScore.ToString();
                 }
                 
