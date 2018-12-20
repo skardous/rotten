@@ -1968,6 +1968,8 @@ MonoBehaviour:
   - {fileID: 211393068686153479, guid: 48fa75e448cf232428bf2f5ccde4b929, type: 3}
   - {fileID: 7211363523305989679, guid: 9a774e7226a8cc44db26740672607494, type: 3}
   - {fileID: 2327711175442990937, guid: b23c22a6192f9ba4c922ffab88ac3300, type: 3}
+  - {fileID: 8673672936476919117, guid: c05851dc07b7502459d04d73b27e1616, type: 3}
+  - {fileID: 3979624782183373670, guid: 2399c7ea7cef641448cc5d224bd1f753, type: 3}
   wormPrefab: {fileID: 6308173076955419691, guid: 65241c1204206a148b4d29d7dab0e994,
     type: 3}
   normalCookPrefab1: {fileID: 3341224684911291730, guid: 8c87c9552b357904395b279b2fe182e0,
@@ -1992,6 +1994,7 @@ MonoBehaviour:
   scoreTextEnd: {fileID: 1038739422}
   scoreTextCorner: {fileID: 1404868183}
   hud: {fileID: 1295987071}
+  clearSprite: {fileID: 21300000, guid: b4b4ba400afb234499af8cd1fc10755d, type: 3}
   rottenConsumablesForLose: 5
   cookedConsumablesForClear: 18
 --- !u!4 &1076193393
@@ -3294,7 +3297,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_Sprite: {fileID: 0}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1

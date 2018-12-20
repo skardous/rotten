@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
     public Text scoreTextEnd;
     public Text scoreTextCorner;
     public GameObject hud;
+    public Sprite clearSprite;
 
     // conf
     public float rottenConsumablesForLose = 5f;
@@ -229,6 +230,17 @@ public class GameManager : MonoBehaviour
                 CheckNewCook();
                 if (clearProgress >= cookedConsumablesForClear)
                 {
+                    if (playerScore == cookedConsumablesForClear)
+                    {
+                        gameInProgress = false;
+                        Image unlockedImage = unlockOverlay.transform.Find("UnlockedImage").GetComponent<Image>();
+                        Text text = unlockOverlay.transform.Find("Text").GetComponent<Text>();
+                        Text unlockedSpecialization = unlockOverlay.transform.Find("UnlockedSpecialization").GetComponent<Text>();
+                        unlockedImage.sprite = clearSprite;
+                        text.text = "Clear button unlocked !";
+                        unlockedSpecialization.text = "Use this button to destroy all fruits !";
+                        unlockOverlay.SetActive(true);
+                    }
                     clearPanel.SetActive(false);
                     clearButton.SetActive(true);
                 }
