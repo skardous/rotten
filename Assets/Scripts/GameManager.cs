@@ -20,10 +20,13 @@ public class GameManager : MonoBehaviour
     private int currentLevel = 0;
     private int wormCount = 0;
     private int clearProgress = 0;
+    private Animator anim;
 
     public List<GameObject> consumablesPrefabs;
     public GameObject wormPrefab;
-    public GameObject normalCookPrefab;
+    public GameObject normalCookPrefab1;
+    public GameObject normalCookPrefab2;
+    public GameObject normalCookPrefab3;
     public GameObject vegetableCookPrefab;
     public GameObject fruitCookPrefab;
     public float ticksPerSecond;
@@ -42,6 +45,8 @@ public class GameManager : MonoBehaviour
     // conf
     public float rottenConsumablesForLose = 8f;
     public float cookedConsumablesForClear = 8f;
+    public GameObject hud;
+
 
     public static System.Random rnd = new System.Random();
 
@@ -64,7 +69,9 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        SpawnNewCook(normalCookPrefab);
+        SpawnNewCook(normalCookPrefab1);
+
+        anim = hud.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -221,6 +228,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                anim.SetTrigger("TriggerTrash");
                 rottenConsumables++;
                 StartCoroutine(ShowMessage(1));
                 if (rottenConsumables > rottenConsumablesForLose)
@@ -229,6 +237,7 @@ public class GameManager : MonoBehaviour
                     gameOverOverlay.SetActive(true);
                     scoreTextEnd.text = playerScore.ToString();
                 }
+                
             }
             destroyConsumable(consumable);
         }
@@ -330,10 +339,10 @@ public class GameManager : MonoBehaviour
     {
         if (currentLevel == 0 && playerScore > 2)
         {
-            SpawnNewCook(normalCookPrefab);
+            SpawnNewCook(normalCookPrefab2);
             Image unlockedImage = unlockOverlay.transform.Find("UnlockedImage").GetComponent<Image>();
             Text unlockedSpecialization = unlockOverlay.transform.Find("UnlockedSpecialization").GetComponent<Text>();
-            unlockedImage.sprite = normalCookPrefab.transform.Find("CookImage").GetComponent<Image>().sprite;
+            unlockedImage.sprite = normalCookPrefab2.transform.Find("CookImage").GetComponent<Image>().sprite;
             unlockedSpecialization.text = "";
             unlockOverlay.SetActive(true);
             gameInProgress = false;
@@ -342,10 +351,10 @@ public class GameManager : MonoBehaviour
 
         if (currentLevel == 1 && playerScore > 9)
         {
-            SpawnNewCook(normalCookPrefab);
+            SpawnNewCook(normalCookPrefab3);
             Image unlockedImage = unlockOverlay.transform.Find("UnlockedImage").GetComponent<Image>();
             Text unlockedSpecialization = unlockOverlay.transform.Find("UnlockedSpecialization").GetComponent<Text>();
-            unlockedImage.sprite = normalCookPrefab.transform.Find("CookImage").GetComponent<Image>().sprite;
+            unlockedImage.sprite = normalCookPrefab3.transform.Find("CookImage").GetComponent<Image>().sprite;
             unlockedSpecialization.text = "";
             unlockOverlay.SetActive(true);
             gameInProgress = false;
@@ -394,7 +403,7 @@ public class GameManager : MonoBehaviour
         currentTime = 0;
         playerScore = 0;
         scoreTextCorner.text = playerScore.ToString();
-        SpawnNewCook(normalCookPrefab);
+        SpawnNewCook(normalCookPrefab1);
 
     }
 
