@@ -216,6 +216,7 @@ MonoBehaviour:
   cookType: 2
   idleImage: {fileID: 21300000, guid: 6afb597df5261b14583ba17e11afd5ce, type: 3}
   busyImage: {fileID: 21300000, guid: 6afb597df5261b14583ba17e11afd5ce, type: 3}
+  sickImage: {fileID: 21300000, guid: 0d5ffbb14b3c1024d999fff19eb83e35, type: 3}
 --- !u!61 &4770006046939371501
 BoxCollider2D:
   m_ObjectHideFlags: 0

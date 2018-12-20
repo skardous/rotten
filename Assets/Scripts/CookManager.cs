@@ -19,6 +19,7 @@ public class CookManager : MonoBehaviour, IDragHandler
     //public Sprite vegIdleImage;
     //public Sprite fruitIdleImage;
     public Sprite busyImage;
+    public Sprite sickImage;
 
     public void OnDrag(PointerEventData eventData)
     {
@@ -55,6 +56,8 @@ public class CookManager : MonoBehaviour, IDragHandler
         if (cooking == true)
         {
             float cookingDuration = GetCookingDuration();
+
+            // cooking end !
             if (cookTime > cookingDuration)
             {
                 cooking = false;
@@ -78,6 +81,10 @@ public class CookManager : MonoBehaviour, IDragHandler
         //myImage.sprite = busyImage;
         ConsumableManager consumableManager = (ConsumableManager)consumable.GetComponent(typeof(ConsumableManager));
         cookingConsumableType = consumableManager.type;
+        if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Worm)
+        {
+            SetSick();
+        }
     }
 
     public bool IsCooking()
@@ -87,7 +94,6 @@ public class CookManager : MonoBehaviour, IDragHandler
 
     public void SetCookType(CookTypeEnum type)
     {
-        Debug.Log(type);
         cookType = type;
         SetIdle();
     }
@@ -112,10 +118,21 @@ public class CookManager : MonoBehaviour, IDragHandler
         //    if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Fruit)
         //    {
         //        return .5f;
-        //    }
+        //    }Je p
         //}
 
+        if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Worm)
+        {
+            return 3.5f;
+        }
+
         return 2.1f;
+    }
+
+    public void SetSick()
+    {
+        myImage = gameObject.transform.Find("CookImage").GetComponent<Image>();
+        myImage.sprite = sickImage;
     }
 
     public void SetIdle()
