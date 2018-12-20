@@ -62,6 +62,9 @@ public class CookManager : MonoBehaviour, IDragHandler
             {
                 cooking = false;
                 SetIdle();
+                Color c = myImage.color;
+                c.a = 1f;
+                myImage.color = c;
                 slider.normalizedValue = 0;
                 gameObject.transform.Find("Slider").gameObject.SetActive(false);
             }
@@ -78,6 +81,9 @@ public class CookManager : MonoBehaviour, IDragHandler
     {
         cooking = true;
         cookStart = Time.time;
+        Color c = myImage.color;
+        c.a = 0.5f;
+        myImage.color = c;
         //myImage.sprite = busyImage;
         ConsumableManager consumableManager = (ConsumableManager)consumable.GetComponent(typeof(ConsumableManager));
         cookingConsumableType = consumableManager.type;
@@ -123,7 +129,7 @@ public class CookManager : MonoBehaviour, IDragHandler
 
         if (cookingConsumableType == ConsumableManager.ConsumableTypeEnum.Worm)
         {
-            return 3.5f;
+            return 4f;
         }
 
         return 2.1f;
@@ -133,6 +139,9 @@ public class CookManager : MonoBehaviour, IDragHandler
     {
         myImage = gameObject.transform.Find("CookImage").GetComponent<Image>();
         myImage.sprite = sickImage;
+        Color c = myImage.color;
+        c.a = 1f;
+        myImage.color = c;
     }
 
     public void SetIdle()

@@ -56,18 +56,18 @@ public class GameManager : MonoBehaviour
         canvasRectTransform = canvas.GetComponent<RectTransform>();
         spawnPosition = canvasRectTransform.rect.height;
 
-        foreach (GameObject consumablePrefab in consumablesPrefabs)
-        {
-            ConsumableManager consManager = consumablePrefab.GetComponent<ConsumableManager>();
-            if (consManager.type == ConsumableManager.ConsumableTypeEnum.Vegetable)
-            {
-                vegetablesPrefabsList.Add(consumablePrefab);
-            }
-            else if (consManager.type == ConsumableManager.ConsumableTypeEnum.Fruit)
-            {
-                fruitsPrefabsList.Add(consumablePrefab);
-            }
-        }
+        //foreach (GameObject consumablePrefab in consumablesPrefabs)
+        //{
+        //    ConsumableManager consManager = consumablePrefab.GetComponent<ConsumableManager>();
+        //    if (consManager.type == ConsumableManager.ConsumableTypeEnum.Vegetable)
+        //    {
+        //        vegetablesPrefabsList.Add(consumablePrefab);
+        //    }
+        //    else if (consManager.type == ConsumableManager.ConsumableTypeEnum.Fruit)
+        //    {
+        //        fruitsPrefabsList.Add(consumablePrefab);
+        //    }
+        //}
 
         SpawnNewCook(normalCookPrefab1);
 
@@ -195,8 +195,6 @@ public class GameManager : MonoBehaviour
         {
             return 1;
         }
-
-        return 1;
     }
 
     public void moveConsumable(GameObject consumable)
@@ -292,14 +290,14 @@ public class GameManager : MonoBehaviour
         float spawnX = (canvasLeft + (canvasWidth / 5) * spawnRandom) + (canvasWidth / 5)/2;
 
         // veg or fruit ?
-        GameObject consumable = vegetablesPrefabsList[0];
-        if (spawnType == 0)
-        {
-            consumable = vegetablesPrefabsList[Random.Range(0, vegetablesPrefabsList.Count)];
-        } else
-        {
-            consumable = fruitsPrefabsList[Random.Range(0, fruitsPrefabsList.Count)];
-        }
+        GameObject consumable = consumablesPrefabs[0];
+        //if (spawnType == 0)
+        //{
+        //    consumable = vegetablesPrefabsList[Random.Range(0, vegetablesPrefabsList.Count)];
+        //} else
+        //{
+            consumable = consumablesPrefabs[Random.Range(0, consumablesPrefabs.Count)];
+        //}
 
         GameObject consumableCreated = Instantiate(consumable, new Vector3(spawnX, spawnPosition, 0), Quaternion.identity) as GameObject;
         RectTransform consumableTransform = consumableCreated.GetComponent<RectTransform>();
