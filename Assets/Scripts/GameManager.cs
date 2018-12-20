@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     private RectTransform canvasRectTransform;
     private float spawnPosition = 100f;
     private int currentLevel = 0;
+    private Animator anim;
 
     public List<GameObject> consumablesPrefabs;
     public GameObject wormPrefab;
@@ -33,6 +34,8 @@ public class GameManager : MonoBehaviour
     public Text scoreTextEnd;
     public Text scoreTextCorner;
     public float rottenConsumablesForLose = 8f;
+    public GameObject hud;
+
 
     public static System.Random rnd = new System.Random();
 
@@ -56,6 +59,8 @@ public class GameManager : MonoBehaviour
         }
 
         SpawnNewCook(normalCookPrefab);
+
+        anim = hud.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -229,6 +234,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                anim.SetTrigger("TriggerTrash");
                 rottenConsumables++;
                 StartCoroutine(ShowMessage(1));
                 if (rottenConsumables > rottenConsumablesForLose)
@@ -237,6 +243,7 @@ public class GameManager : MonoBehaviour
                     gameOverOverlay.SetActive(true);
                     scoreTextEnd.text = playerScore.ToString();
                 }
+                
             }
             destroyConsumable(consumable);
         }
