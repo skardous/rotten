@@ -200,8 +200,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cookType: 2
-  idleImage: {fileID: 21300000, guid: c988f961e6f9626428ea55b19f67148e, type: 3}
-  busyImage: {fileID: 21300000, guid: ef5b92dfec212224e904a9bfbd9ce5e0, type: 3}
+  idleImage: {fileID: 21300000, guid: da7c9e56524c3ea4ca0ad63c39b99d3e, type: 3}
+  busyImage: {fileID: 21300000, guid: da7c9e56524c3ea4ca0ad63c39b99d3e, type: 3}
 --- !u!61 &8108360512922295632
 BoxCollider2D:
   m_ObjectHideFlags: 0
