@@ -24,13 +24,13 @@ public class CookManager : MonoBehaviour, IDragHandler
     {
 #if UNITY_EDITOR || UNITY_STANDALONE
 
-        if (cooking == false)
+        //if (cooking == false)
         {
             transform.position = Input.mousePosition;
         }
 
 #elif UNITY_IOS || UNITY_ANDROID
-        if (cooking == false)
+        //if (cooking == false)
         {
             transform.position = Input.GetTouch(0).position;
         }

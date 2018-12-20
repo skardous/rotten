@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     private RectTransform canvasRectTransform;
     private float spawnPosition = 100f;
     private int currentLevel = 0;
+    private int wormCount = 0;
+    private int clearProgress = 0;
 
     public List<GameObject> consumablesPrefabs;
     public GameObject wormPrefab;
@@ -30,9 +32,16 @@ public class GameManager : MonoBehaviour
     public GameObject canvas;
     public GameObject gameOverOverlay;
     public GameObject unlockOverlay;
+    public GameObject wormOverlay;
+    public Slider clearSlider;
+    public GameObject clearPanel;
+    public GameObject clearButton;
     public Text scoreTextEnd;
     public Text scoreTextCorner;
+
+    // conf
     public float rottenConsumablesForLose = 8f;
+    public float cookedConsumablesForClear = 8f;
 
     public static System.Random rnd = new System.Random();
 
@@ -85,6 +94,16 @@ public class GameManager : MonoBehaviour
             rottenSlider.value = rottenSlider.value - 0.01f;
         }
 
+        if (clearSlider.value < (clearProgress / cookedConsumablesForClear))
+        {
+            clearSlider.value = clearSlider.value + 0.01f;
+        }
+
+        if (clearSlider.value > (clearProgress / cookedConsumablesForClear))
+        {
+            clearSlider.value = clearSlider.value - 0.01f;
+        }
+
     }
 
     
@@ -121,17 +140,6 @@ public class GameManager : MonoBehaviour
             
         }
 
-        //List<GameObject> enemiesToMove = new List<GameObject>();
-        //foreach (GameObject consumable in consumablesList)
-        //{
-        //    consumablesTo.Add(element);
-        //}
-
-        //foreach (GameObject enemy in enemiesToMove)
-        //{
-        //    moveEnemy(enemy);
-        //}
-
     }
 
     public bool itsSpawnTime()
@@ -140,23 +148,12 @@ public class GameManager : MonoBehaviour
         {
             return true;
         }
-        //Debug.Log("currentTime : " + currentTime);
+
         if (currentTime < 15 && currentTime % 4 == 0)
             return true;
 
         if (currentTime > 15 && currentTime % 2 ==0)
             return true;
-
-        //if (currentTime > 20 && currentTime < 30 && currentTime % 1 == 0)
-        //    return true;
-
-        //if (currentTime > 30 && currentTime % 1 == 0)
-        //    return true;
-
-        //if (currentTime % 2 == 0)
-        //{
-        //    return true;
-        //}
 
         return false;
     }
@@ -164,19 +161,8 @@ public class GameManager : MonoBehaviour
     public bool ItsWormTime()
     {
 
-        if (currentTime == 20 || currentTime == 40 || (currentTime > 95 && currentTime % 10 == 0))
+        if (currentTime == 20 || (currentTime > 40 && currentTime < 95 && currentTime % 10 == 0) || (currentTime > 95 && currentTime % 6 == 0))
             return true;
-
-        //if (currentTime > 20 && currentTime < 30 && currentTime % 1 == 0)
-        //    return true;
-
-        //if (currentTime > 30 && currentTime % 1 == 0)
-        //    return true;
-
-        //if (currentTime % 2 == 0)
-        //{
-        //    return true;
-        //}
 
         return false;
     }
@@ -211,11 +197,17 @@ public class GameManager : MonoBehaviour
             if (cookManager.IsCooking() == false)
             { 
                 playerScore++;
+                clearProgress++;
                 scoreTextCorner.text = playerScore.ToString();
                 //scoreText.text = playerScore.ToString();
                 cookManager.StartCooking(consumable);
                 destroyConsumable(consumable);
                 CheckNewCook();
+                if (clearProgress > cookedConsumablesForClear)
+                {
+                    clearPanel.SetActive(false);
+                    clearButton.SetActive(true);
+                }
             }
 
         }
@@ -305,6 +297,13 @@ public class GameManager : MonoBehaviour
         wormCollider.size = new Vector2((canvasWidth / 5), (canvasWidth / 5));
         wormCreated.transform.SetParent(GameObject.FindGameObjectWithTag("Canvas").transform, false);
         consumablesList.Add(wormCreated);
+        wormCount++;
+
+        if (wormCount == 1)
+        {
+            wormOverlay.SetActive(true);
+            gameInProgress = false;
+        }
     }
 
     public void destroyConsumable(GameObject consumable)
@@ -361,7 +360,7 @@ public class GameManager : MonoBehaviour
         float canvasLeft = -1 * (canvasWidth / 2);
         float spawnX = (canvasLeft + (canvasWidth / 5) * (cooksList.Count + 1)) + (canvasWidth / 5) / 2;
 
-        GameObject cookCreated = Instantiate(cookPrefab, new Vector3(spawnX, 0, 0), Quaternion.identity) as GameObject;
+        GameObject cookCreated = Instantiate(cookPrefab, new Vector3(0, 0, 0), Quaternion.identity) as GameObject;
         RectTransform cookTransform = cookCreated.GetComponent<RectTransform>();
         Vector2 size = cookTransform.sizeDelta;
         float ratio = size.y / size.x;
@@ -372,20 +371,11 @@ public class GameManager : MonoBehaviour
         cooksList.Add(cookCreated);
     }
 
-    private void SpawnCooks()
-    {
-        //// spawn the cooks
-        //int[] spawnCooks = new int[] { 1, 2, 3 };
-        //for (int i = 0; i < 3; i++)
-        //{
-            
-        //}
-    }
-
     public void Restart()
     {
         currentLevel = 0;
         rottenConsumables = 0;
+        wormCount = 0;
         foreach (GameObject consumable in consumablesList)
         {
             Destroy(consumable);
@@ -404,7 +394,6 @@ public class GameManager : MonoBehaviour
         currentTime = 0;
         playerScore = 0;
         scoreTextCorner.text = playerScore.ToString();
-        Debug.Log(cooksList.Count);
         SpawnNewCook(normalCookPrefab);
 
     }
@@ -412,6 +401,20 @@ public class GameManager : MonoBehaviour
     public void ContinueGame()
     {
         gameInProgress = true;
+    }
+
+    public void Clear()
+    {
+        foreach (GameObject consumable in consumablesList)
+        {
+            Destroy(consumable);
+            //consumablesList.Remove(consumable);
+        }
+        consumablesList.RemoveAll(delegate (GameObject o) { return o == null; });
+
+        clearPanel.SetActive(true);
+        clearButton.SetActive(false);
+        clearProgress = 0;
     }
 
     /**
