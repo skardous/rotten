@@ -44,6 +44,7 @@ public class GameManager : MonoBehaviour
     public Text scoreTextCorner;
     public GameObject hud;
     public Sprite clearSprite;
+    //public Image backgroundImage;
 
     // conf
     public float rottenConsumablesForLose = 5f;
@@ -262,6 +263,11 @@ public class GameManager : MonoBehaviour
             {
                 anim.SetTrigger("TriggerTrash");
                 rottenConsumables++;
+                Image backgroundImage = canvas.transform.Find("Image").GetComponent<Image>();
+                Color c = backgroundImage.color;
+                c.g = 255 - (25 * rottenConsumables);
+                c.b = 255 - (25 * rottenConsumables);
+                backgroundImage.color = new Color32(255, (byte)c.g, (byte)c.b, 255);
                 if (rottenConsumables > rottenConsumablesForLose)
                 {
                     gameInProgress = false;

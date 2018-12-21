@@ -1995,6 +1995,7 @@ MonoBehaviour:
   scoreTextCorner: {fileID: 1404868183}
   hud: {fileID: 1295987071}
   clearSprite: {fileID: 21300000, guid: b4b4ba400afb234499af8cd1fc10755d, type: 3}
+  backgroundImage: {fileID: 1919790679}
   rottenConsumablesForLose: 5
   cookedConsumablesForClear: 18
 --- !u!4 &1076193393
