@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     private Animator anim;
     private Animator animWormPopup;
     private Animator animGameOverPopup;
+    private Animator animUnlockPopup;
 
     public List<GameObject> consumablesPrefabs;
     public GameObject wormPrefab;
@@ -76,6 +77,7 @@ public class GameManager : MonoBehaviour
         anim = hud.GetComponent<Animator>();
         animWormPopup = wormOverlay.GetComponent<Animator>();
         animGameOverPopup = gameOverOverlay.GetComponent<Animator>();
+        animUnlockPopup = unlockOverlay.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -234,13 +236,15 @@ public class GameManager : MonoBehaviour
                     if (playerScore == cookedConsumablesForClear)
                     {
                         gameInProgress = false;
-                        Image unlockedImage = unlockOverlay.transform.Find("UnlockedImage").GetComponent<Image>();
-                        Text text = unlockOverlay.transform.Find("Text").GetComponent<Text>();
-                        Text unlockedSpecialization = unlockOverlay.transform.Find("UnlockedSpecialization").GetComponent<Text>();
+                        Image unlockedImage = unlockOverlay.transform.Find("Popup").transform.Find("UnlockedImage").GetComponent<Image>();
+                        Text text = unlockOverlay.transform.Find("Popup").transform.Find("Text").GetComponent<Text>();
+                        Text unlockedSpecialization = unlockOverlay.transform.Find("Popup").transform.Find("UnlockedSpecialization").GetComponent<Text>();
                         unlockedImage.sprite = clearSprite;
                         text.text = "Clear button unlocked !";
                         unlockedSpecialization.text = "Use this button to destroy all fruits !";
                         unlockOverlay.SetActive(true);
+                        animUnlockPopup.SetTrigger("triggerUnlock");
+
                     }
                     clearPanel.SetActive(false);
                     clearButton.SetActive(true);
@@ -281,9 +285,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    IEnumerator ShowMessage(float delay)
+    IEnumerator SpawnCookDelay(float delay, GameObject prefab)
     {
         yield return new WaitForSeconds(delay);
+        SpawnNewCook(prefab);
     }
 
     public List<GameObject> getCooks()
@@ -376,26 +381,28 @@ public class GameManager : MonoBehaviour
     {
         if (currentLevel == 0 && playerScore > 2)
         {
-            SpawnNewCook(normalCookPrefab2);
-            Image unlockedImage = unlockOverlay.transform.Find("UnlockedImage").GetComponent<Image>();
-            Text unlockedSpecialization = unlockOverlay.transform.Find("UnlockedSpecialization").GetComponent<Text>();
+            Image unlockedImage = unlockOverlay.transform.Find("Popup").transform.Find("UnlockedImage").GetComponent<Image>();
+            Text unlockedSpecialization = unlockOverlay.transform.Find("Popup").transform.Find("UnlockedSpecialization").GetComponent<Text>();
             unlockedImage.sprite = normalCookPrefab2.transform.Find("CookImage").GetComponent<Image>().sprite;
             unlockedSpecialization.text = "";
             unlockOverlay.SetActive(true);
+            animUnlockPopup.SetTrigger("triggerUnlock");
             gameInProgress = false;
             currentLevel++;
+            StartCoroutine(SpawnCookDelay(1, normalCookPrefab2));
         }
 
         if (currentLevel == 1 && playerScore > 9)
         {
-            SpawnNewCook(normalCookPrefab3);
-            Image unlockedImage = unlockOverlay.transform.Find("UnlockedImage").GetComponent<Image>();
-            Text unlockedSpecialization = unlockOverlay.transform.Find("UnlockedSpecialization").GetComponent<Text>();
+            Image unlockedImage = unlockOverlay.transform.Find("Popup").transform.Find("UnlockedImage").GetComponent<Image>();
+            Text unlockedSpecialization = unlockOverlay.transform.Find("Popup").transform.Find("UnlockedSpecialization").GetComponent<Text>();
             unlockedImage.sprite = normalCookPrefab3.transform.Find("CookImage").GetComponent<Image>().sprite;
             unlockedSpecialization.text = "";
             unlockOverlay.SetActive(true);
+            animUnlockPopup.SetTrigger("triggerUnlock");
             gameInProgress = false;
             currentLevel++;
+            StartCoroutine(SpawnCookDelay(1, normalCookPrefab3));
         }
     }
 

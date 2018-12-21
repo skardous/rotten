@@ -929,7 +929,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1447,8 +1447,13 @@ RectTransform:
   m_GameObject: {fileID: 843707430}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_Children:
+  - {fileID: 2136183278}
+  - {fileID: 1625906420}
+  - {fileID: 1575501764}
+  - {fileID: 1828672444}
+  - {fileID: 1959532183}
   m_Father: {fileID: 1046856022}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1853,6 +1858,7 @@ GameObject:
   - component: {fileID: 1046856024}
   - component: {fileID: 1046856023}
   - component: {fileID: 1046856025}
+  - component: {fileID: 1046856026}
   m_Layer: 0
   m_Name: Unlock-overlay
   m_TagString: Untagged
@@ -1872,11 +1878,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 843707431}
-  - {fileID: 2136183278}
-  - {fileID: 1625906420}
-  - {fileID: 1575501764}
-  - {fileID: 1828672444}
-  - {fileID: 1959532183}
   m_Father: {fileID: 1210647381}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1898,7 +1899,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.49019608}
+  m_Color: {r: 0, g: 0, b: 0, a: 0}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -1935,6 +1936,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameManager: {fileID: 1076193392}
+--- !u!95 &1046856026
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1046856021}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 130dda9cb7c9ebe49928939b09216abf, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1076193391
 GameObject:
   m_ObjectHideFlags: 0
@@ -3264,17 +3284,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1575501763}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1046856022}
-  m_RootOrder: 3
+  m_Father: {fileID: 843707431}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.2463775, y: 0.37600002}
   m_AnchorMax: {x: 0.7403113, y: 0.65526867}
-  m_AnchoredPosition: {x: 1, y: -1.1000061}
-  m_SizeDelta: {x: 3.869999, y: 4.450001}
+  m_AnchoredPosition: {x: -0.91674805, y: 8.155487}
+  m_SizeDelta: {x: 146.12305, y: 169.7769}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1575501765
 MonoBehaviour:
@@ -3338,17 +3358,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1625906419}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1046856022}
-  m_RootOrder: 2
+  m_Father: {fileID: 843707431}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.15, y: 0.775}
   m_AnchorMax: {x: 0.85, y: 0.85}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 185}
+  m_SizeDelta: {x: 201.59998, y: 44.399902}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1625906421
 MonoBehaviour:
@@ -4055,17 +4075,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1828672443}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1046856022}
-  m_RootOrder: 4
+  m_Father: {fileID: 843707431}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.15, y: 0.711}
   m_AnchorMax: {x: 0.82350993, y: 0.775}
-  m_AnchoredPosition: {x: 4, y: -4.340027}
-  m_SizeDelta: {x: 8, y: 9}
+  m_AnchoredPosition: {x: 0.1854248, y: 139.51593}
+  m_SizeDelta: {x: 201.97076, y: 46.88806}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1828672445
 MonoBehaviour:
@@ -4614,13 +4634,13 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 1046856022}
-  m_RootOrder: 5
+  m_Father: {fileID: 843707431}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.15, y: 0.273}
   m_AnchorMax: {x: 0.8334437, y: 0.3548657}
-  m_AnchoredPosition: {x: 1.4899902, y: 0}
-  m_SizeDelta: {x: 4.8999996, y: 0}
+  m_AnchoredPosition: {x: -0.894104, y: -110.15173}
+  m_SizeDelta: {x: 201.73178, y: 48.464478}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1959532184
 MonoBehaviour:
@@ -4804,18 +4824,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2136183277}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1311356443}
-  m_Father: {fileID: 1046856022}
-  m_RootOrder: 1
+  m_Father: {fileID: 843707431}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.2, y: 0.15}
   m_AnchorMax: {x: 0.8, y: 0.25}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -177.59998}
+  m_SizeDelta: {x: 172.79999, y: 59.200012}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2136183279
 MonoBehaviour:
