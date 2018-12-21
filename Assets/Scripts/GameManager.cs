@@ -262,6 +262,11 @@ public class GameManager : MonoBehaviour
                 {
                     rottenConsumables = 0;
                 }
+                Image backgroundImage = canvas.transform.Find("Image").GetComponent<Image>();
+                Color c = backgroundImage.color;
+                c.g = 255 - (25 * rottenConsumables);
+                c.b = 255 - (25 * rottenConsumables);
+                backgroundImage.color = new Color32(255, (byte)c.g, (byte)c.b, 255);
             }
             else
             {
@@ -448,6 +453,11 @@ public class GameManager : MonoBehaviour
         playerScore = 0;
         scoreTextCorner.text = playerScore.ToString();
         SpawnNewCook(normalCookPrefab1);
+        Image backgroundImage = canvas.transform.Find("Image").GetComponent<Image>();
+        Color c = backgroundImage.color;
+        c.g = 255 - (25 * rottenConsumables);
+        c.b = 255 - (25 * rottenConsumables);
+        backgroundImage.color = new Color32(255, (byte)c.g, (byte)c.b, 255);
 
     }
 
